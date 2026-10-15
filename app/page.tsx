@@ -8,7 +8,8 @@ export default async function Home() {
   let sherbimet: Sherbim[];
   try {
     sherbimet = await lexoSherbimet();
-  } catch {
+  } catch (e) {
+    console.error("Gabimi i databazës:", e);
     return (
       <main>
         <h1>Vexor Growth</h1>
@@ -20,8 +21,17 @@ export default async function Home() {
 
   return (
     <main>
-      <h1>Vexor Growth · Shërbimet për kreatorë</h1>
-      <p>Burimi: Neon · të dhëna fiktive për ushtrime</p>
+      <header className="app-header">
+        <div className="brand" aria-label="Vexor Growth">
+          <b>VEXOR</b>
+          <span>GROWTH</span>
+        </div>
+      </header>
+
+      <p className="eyebrow">Çfarë ofrojmë</p>
+      <h1>Shërbimet</h1>
+      <p>Zgjidh një shërbim dhe dërgo kërkesën. Ne punojmë prapa skenës, ti mbetesh eksperti.</p>
+
       {sherbimet.length === 0 ? (
         <p>Nuk ka shërbime për momentin.</p>
       ) : (
@@ -31,6 +41,7 @@ export default async function Home() {
           ))}
         </div>
       )}
+      <p className="footnote">Burimi: Neon · të dhëna fiktive për ushtrime</p>
     </main>
   );
 }

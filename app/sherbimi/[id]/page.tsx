@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { gjejSherbimin } from "@/lib/sherbimet";
+import { Ikona, IKONAT } from "@/components/Ikona";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,9 @@ export default async function Detajet({
   } catch {
     return (
       <main>
-        <h1>Vexor Growth</h1>
+        <Link className="back" href="/">← Kthehu te shërbimet</Link>
+        <h1>Diçka nuk shkoi</h1>
         <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
-        <Link href="/">← Kthehu te lista</Link>
       </main>
     );
   }
@@ -24,17 +25,42 @@ export default async function Detajet({
 
   return (
     <main>
-      <Link href="/">← Kthehu te lista</Link>
+      <Link className="back" href="/">← Kthehu te shërbimet</Link>
+      <span className="badge">{sherbim.kategoria}</span>
       <h1>{sherbim.emri}</h1>
-      <p>Kategoria: {sherbim.kategoria}</p>
-      <p>Afati: {sherbim.afati}</p>
-      <p>Si punojmë: {sherbim.menyra}</p>
-      <p>Vende të lira: {sherbim.vende}</p>
-      {sherbim.vende > 0 ? (
-        <Link className="action" href={`/sherbimi/${id}/kerkesa`}>
-          Kërko bashkëpunim
-        </Link>
-      ) : <button className="action" disabled>Nuk ka vende të lira</button>}
+      <p className="lead">{sherbim.pershkrimi}</p>
+
+      <dl className="info-card">
+        <div>
+          <dt>Afati</dt>
+          <dd>{sherbim.afati}</dd>
+        </div>
+        <div>
+          <dt>Si punojmë</dt>
+          <dd>{sherbim.menyra}</dd>
+        </div>
+      </dl>
+
+      <section className="panel">
+        <h2>Çka përfshin</h2>
+        <ul className="check-list">
+          {sherbim.perfshin.map((pika) => (
+            <li key={pika}>
+              <Ikona d={IKONAT.check} size={18} sw={2.2} />
+              <span>{pika}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="panel">
+        <h2>Për kë është</h2>
+        <p>{sherbim.per_ke}</p>
+      </section>
+
+      <Link className="action" href={`/sherbimi/${id}/kerkesa`}>
+        Dërgo kërkesë
+      </Link>
     </main>
   );
 }
