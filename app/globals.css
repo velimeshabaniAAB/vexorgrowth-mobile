@@ -262,3 +262,71 @@ main p strong { color: var(--text); font-weight: 600; }
   font: inherit;
   cursor: pointer;
 }
+
+/* Rreth nesh */
+.parimet { list-style: none; padding: 0; margin: 1.5rem 0; display: flex; flex-direction: column; gap: 1rem; }
+.parimet li { display: flex; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #222226; }
+.parimet li:last-child { border-bottom: none; }
+.parimet-nr { font-size: 0.8rem; font-weight: 600; color: #a3a3a8; width: 1.6rem; flex: none; padding-top: 0.2rem; }
+.parimet h2 { font-size: 1rem; margin: 0 0 0.25rem; }
+.parimet p { margin: 0; font-size: 0.85rem; color: #a3a3a8; }
+.kontakti { border: 1px solid #2a2a2e; border-radius: 16px; background: #0e0e10; margin: 1.5rem 0; overflow: hidden; }
+.kontakti .eyebrow { padding: 0.9rem 1rem 0.3rem; margin: 0; }
+.kontakti-rresht { display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 1rem; border-top: 1px solid #222226; color: #f2f2f2; text-decoration: none; font-size: 0.9rem; }
+.kontakti-rresht span:last-child { color: #c4c4c8; }
+
+
+/* Shërbimet: filtrat */
+.filtrat { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 1.25rem; }
+.filtri {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 0 1rem;
+  border: 1px solid #3a3a3f; border-radius: 999px;
+  color: #d4d4d8; text-decoration: none; font-size: 0.85rem; font-weight: 500;
+}
+.filtri.aktiv { background: #e4e4e7; border-color: #e4e4e7; color: #0a0a0a; font-weight: 600; }
+
+/* Menuja poshtë */
+body { padding-bottom: 92px; }
+.navigimi {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  display: flex; justify-content: space-around; align-items: center;
+  height: 76px; padding-bottom: env(safe-area-inset-bottom);
+  background: #0b0b0d; border-top: 1px solid #222226;
+}
+.nav-lidhja {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-width: 72px; padding: 6px 0;
+  font-size: 11px; color: #8e8e93; text-decoration: none;
+}
+.nav-lidhja.aktive { color: #f2f2f2; font-weight: 600; }
+
+
+
+/* Në ekrane të mëdha menuja mbetet e ngushtë dhe në qendër, si në telefon */
+@media (min-width: 600px) {
+  .navigimi {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 480px;
+    border: 1px solid #222226;
+    border-bottom: none;
+    border-radius: 18px 18px 0 0;
+  }
+}
+
+
+/* Ballina */
+.hero { margin: 1.5rem 0 2rem; }
+.hero h1 { font-size: clamp(28px, 7vw, 36px); line-height: 1.18; margin: 0.4rem 0 0.8rem; }
+.hero-butonat { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.2rem; }
+.hapat { margin: 0 0 2rem; }
+.hapat ol { list-style: none; padding: 0; margin: 0.6rem 0 0; display: flex; flex-direction: column; gap: 0.9rem; }
+.hapat li { display: flex; gap: 0.9rem; align-items: flex-start; }
+.hapat-nr {
+  width: 30px; height: 30px; flex: none; border-radius: 50%;
+  background: #1c1c1f; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+}
+.hapat li div { display: flex; flex-direction: column; gap: 2px; }
+.hapat li span:not(.hapat-nr) { font-size: 13px; color: #a3a3a8; }

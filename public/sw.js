@@ -47,9 +47,12 @@ self.addEventListener("fetch", event => {
   if (url.pathname === API && !url.search) {
     event.respondWith(readPublicList(request));
   } else if (request.mode === "navigate" && ["/", "/offline.html"].includes(url.pathname)) {
-    event.respondWith(fetch(request).catch(async () => {
-
-      const saved = await (await caches.open(CACHE)).match("/offline.html");    }));
+        event.respondWith(fetch(request).catch(async () => {
+      const saved = await (await caches.open(CACHE)).match("/offline.html");
+      return saved || new Response("Hape Vexor Growth një herë me internet.", {
+        status: 503, headers: { "content-type": "text/plain; charset=utf-8" },
+      });
+    }));
   }
   // /panel, /api/auth, /sherbimi/.../kerkesa, POST dhe faqet private nuk ruhen.
 });
