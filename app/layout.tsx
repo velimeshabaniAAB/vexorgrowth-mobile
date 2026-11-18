@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import Pwa from "../components/Pwa";
 
 // Shkronja e hollë dhe e hapur, si te logoja.
 const vexorFont = Montserrat({
@@ -23,7 +24,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="sq" className={vexorFont.variable}>
-      <body>{children}</body>
+      <body>
+        <Pwa />
+        {children}
+      </body>
     </html>
   );
 }

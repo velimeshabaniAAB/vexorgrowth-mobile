@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { KartaSherbimi } from "@/components/KartaSherbimi";
 import { lexoSherbimet, type Sherbim } from "@/lib/sherbimet";
+
 
 // Lexo bazën përsëri në çdo kërkesë për këtë faqe.
 export const dynamic = "force-dynamic";
@@ -14,7 +16,7 @@ export default async function Home() {
       <main>
         <h1>Vexor Growth</h1>
         <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
-        <a className="action" href="/">Provo përsëri</a>
+        <Link className="action" href="/">Provo përsëri</Link>
       </main>
     );
   }
@@ -26,6 +28,7 @@ export default async function Home() {
           <b>VEXOR</b>
           <span>GROWTH</span>
         </div>
+          <Link href="/panel" className="panel-link">Hyr / Paneli im</Link>
       </header>
 
       <p className="eyebrow">Çfarë ofrojmë</p>
