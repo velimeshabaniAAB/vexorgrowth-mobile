@@ -19,10 +19,10 @@ export default async function Kerkesa({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ derguar?: string; gabim?: string }>;
+  searchParams: Promise<{ derguar?: string; gabim?: string; kodi?: string }>;
 }) {
   const { id } = await params;
-  const { derguar, gabim } = await searchParams;
+  const { derguar, gabim, kodi } = await searchParams;
 
   let sherbim;
   try {
@@ -50,7 +50,10 @@ export default async function Kerkesa({
           <p>Faleminderit! Kërkesa për <strong>{sherbim.emri}</strong> u ruajt.</p>
           <p className="status-pill">Statusi: Në pritje</p>
           <p>Do të të kontaktojmë brenda 24 orësh në emailin që na dhe.</p>
-          <Link className="action" href="/">Kthehu te shërbimet</Link>
+          {kodi && /^[A-Za-z0-9_-]{8,40}$/.test(kodi) && (
+           <Link className="action" href={`/kerkesa/${kodi}`}>Ndiq kërkesën</Link>
+          )}
+          <Link className="action action-ghost" href="/">Kthehu te shërbimet</Link>
         </section>
       </main>
     );

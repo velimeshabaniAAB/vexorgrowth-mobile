@@ -86,7 +86,7 @@ export function dataShqip(data: string) {
 }
 
 // 1) Sapo kreatori dërgon kërkesën.
-export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; sherbimi: string }) {
+export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; sherbimi: string; linku: string }) {
   return dergo({
     to: k.emaili,
     replyTo: emailiIAdminit(),
@@ -97,6 +97,11 @@ export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; 
       `Kërkesa jote për "${k.sherbimi}" u ruajt. Statusi: Në pritje.`,
       "Do të të kontaktojmë brenda 24 orësh.",
       "",
+      "Ndiq kërkesën tënde këtu (linku është personal):",
+      k.linku,
+      "",
+      "Nëse ky email doli te Spam, kliko \"Not spam\", që të mos e humbasësh ftesën për takim.",
+      "",
       "Vexor Growth",
     ].join("\n"),
   });
@@ -106,7 +111,7 @@ export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; 
 const icsTekst = (t: string) => t.replace(/[\\;,]/g, "\\$&").replace(/\r?\n/g, "\\n");
 
 // Krijon skedarin takimi.ics që e shton takimin në kalendar me një klikim.
-function krijoIcs(t: { id: number; sherbim: string; data: string; ora: string; zoom: string }, minuta = 45) {
+export function krijoIcs(t: { id: number; sherbim: string; data: string; ora: string; zoom: string }, minuta = 45) {
   const [v, m, d] = t.data.split("-").map(Number);
   const [h, min] = t.ora.split(":").map(Number);
   const fillimi = new Date(Date.UTC(v, m - 1, d, h, min));
@@ -135,6 +140,7 @@ function krijoIcs(t: { id: number; sherbim: string; data: string; ora: string; z
 // 2) Kur operatori e pranon: data, ora, linku i Zoom dhe takimi.ics.
 export async function njoftoKreatorinPranuar(t: {
   id: number; emri: string; emaili: string; sherbim: string; data: string; ora: string; zoom: string;
+  linku?: string;
 }) {
   return dergo({
     to: t.emaili,
@@ -150,6 +156,7 @@ export async function njoftoKreatorinPranuar(t: {
       `Linku i Zoom: ${t.zoom}`,
       "",
       "Hape skedarin takimi.ics për ta shtuar takimin në kalendarin tënd.",
+      ...(t.linku ? ["", "Kërkesa jote:", t.linku] : []),
       "",
       "Vexor Growth",
     ].join("\n"),
@@ -158,5 +165,27 @@ export async function njoftoKreatorinPranuar(t: {
       content: Buffer.from(krijoIcs(t), "utf-8"),
       contentType: "text/calendar; charset=utf-8; method=PUBLISH",
     }],
+  });
+}
+
+
+// 3) "E humbe emailin?": i dërgon kreatorit linqet e kërkesave të tij.
+export async function dergoLinqetEKerkesave(emaili: string, lista: { sherbim: string; linku: string; statusi: string }[]) {
+  const statusi: Record<string, string> = { ne_pritje: "Në pritje", pranuar: "Pranuar", refuzuar: "Refuzuar" };
+  return dergo({
+    to: emaili,
+    replyTo: emailiIAdminit(),
+    subject: `Kërkesat e tua te Vexor Growth (${lista.length})`,
+    text: [
+      "Përshëndetje,",
+      "",
+      "Këto janë linqet personale të kërkesave të tua:",
+      "",
+      ...lista.map((k) => `• ${k.sherbim} (${statusi[k.statusi] ?? k.statusi}): ${k.linku}`),
+      "",
+      "Nëse nuk e kërkove ti këtë email, mund ta injorosh.",
+      "",
+      "Vexor Growth",
+    ].join("\n"),
   });
 }

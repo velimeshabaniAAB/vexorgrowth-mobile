@@ -2,8 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { gjejSherbimin } from "@/lib/sherbimet";
-import { ruajKerkesen } from "@/lib/kerkesat";
+import { ruajKerkesen, linkuIKerkeses } from "@/lib/kerkesat";
 import { njoftoMeEmail, njoftoKreatorinDerguar } from "@/lib/email";
+
 function lexo(formData: FormData, emri: string, max: number) {
   const v = formData.get(emri);
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -34,29 +35,30 @@ export async function dergoKerkesen(formData: FormData) {
   }
   if (!sherbim) gabim("sherbimi");
 
-  // 2) Ruaj kërkesën
+  // 2) Ruaj kërkesën dhe merr kodin personal
   let uRuajt = false;
+  let kodi = "";
   try {
-    await ruajKerkesen({ sherbimId, emri, emaili, linku: linku || null, mesazhi: mesazhi || null });
+    kodi = await ruajKerkesen({ sherbimId, emri, emaili, linku: linku || null, mesazhi: mesazhi || null });
     uRuajt = true;
   } catch (e) {
     console.error("Gabim gjatë ruajtjes së kërkesës:", e);
   }
   if (!uRuajt) gabim("databaza");
 
-  // 3) Email (opsional): nëse dështon, kërkesa mbetet e ruajtur
+  // 3) Email te admini (opsional): nëse dështon, kërkesa mbetet e ruajtur
   try {
     await njoftoMeEmail({ sherbimi: sherbim!.emri, emri, emaili, linku: linku || null, mesazhi: mesazhi || null });
-   } catch (e) {
+  } catch (e) {
     console.error("Emaili nuk u dërgua:", e);
   }
 
-  // 4) Email te kreatori: "E morëm kërkesën tënde" (opsional)
+  // 4) Email te kreatori me linkun personal (opsional)
   try {
-    await njoftoKreatorinDerguar({ emri, emaili, sherbimi: sherbim!.emri });
+    await njoftoKreatorinDerguar({ emri, emaili, sherbimi: sherbim!.emri, linku: linkuIKerkeses(kodi) });
   } catch (e) {
     console.error("Emaili te kreatori nuk u dërgua:", e);
   }
 
-  redirect(`${faqja}?derguar=1`);
+  redirect(`${faqja}?derguar=1&kodi=${encodeURIComponent(kodi)}`);
 }

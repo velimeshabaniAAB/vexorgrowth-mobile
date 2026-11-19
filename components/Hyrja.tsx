@@ -1,8 +1,9 @@
 "use client";
 import { signIn, signOut } from "next-auth/react";
 
-export default function Hyrja({ brenda }: { brenda: boolean }) {
+// klasa: stili i butonit (parazgjedhja "action"; te paneli "dil-btn").
+export default function Hyrja({ brenda, klasa = "action" }: { brenda: boolean; klasa?: string }) {
   return brenda
-    ? <button className="action" onClick={() => signOut({ callbackUrl: "/panel" })}>Dil</button>
-    : <button className="action" onClick={() => signIn("github", { callbackUrl: "/panel" })}>Hyr me GitHub</button>;
+    ? <button className={klasa} onClick={() => signOut({ callbackUrl: "/panel" })}>Dil</button>
+    : <button className={klasa} onClick={() => signIn("github", { callbackUrl: "/panel" })}>Hyr me GitHub</button>;
 }

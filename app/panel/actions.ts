@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { ndryshoStatusin, pranoMeTakim } from "@/lib/lejet";
 import { njoftoKreatorinPranuar } from "@/lib/email";
+import { linkuIKerkeses } from "@/lib/kerkesat";
+
 
 export async function ruajStatusin(formData: FormData) {
   let mesazh: string;
@@ -33,7 +35,10 @@ export async function pranoKerkesen(formData: FormData) {
     if (r.takimi) {
       // Nëse emaili dështon, takimi mbetet i ruajtur.
       let uDergua = false;
-      try { uDergua = await njoftoKreatorinPranuar(r.takimi); } catch (e) { console.error(e); }
+      try { uDergua = await njoftoKreatorinPranuar({
+        ...r.takimi,
+        linku: r.takimi.kodi ? linkuIKerkeses(r.takimi.kodi) : undefined,
+      }); } catch (e) { console.error(e); }
       mesazh = uDergua ? "pranuar" : "pranuar-pa-email";
       revalidatePath("/panel");
     }

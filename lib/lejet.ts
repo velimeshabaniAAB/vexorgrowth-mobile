@@ -23,6 +23,7 @@ export type TakimiIPranuar = {
   emri: string;
   emaili: string;
   sherbim: string;
+  kodi: string | null;
   data: string;
   ora: string;
   zoom: string;
@@ -80,12 +81,12 @@ export async function pranoMeTakim(id: string, data: string, ora: string, zoom: 
   if (!/^\d+$/.test(id) || !dataOk || !oraOk || !zoomOk) return { rezultati: "takimi" };
   const sql = getSql();
   const rows = await sql`UPDATE kerkesat_vexor k
-    SET statusi = 'pranuar', data_takimit = ${data}, ora_takimit = ${ora}, zoom_link = ${zoom}
+    SET statusi = 'pranuar', data_takimit = ${data}, ora_takimit = ${ora}, zoom_link = ${zoom}, pranuar_me = now()
     FROM sherbimet s
     WHERE k.id = ${Number(id)} AND s.id = k.sherbim_id AND s.operator_id = ${p.id}
       AND EXISTS (SELECT 1 FROM profilet_vexor WHERE github_id = ${p.id} AND roli = 'operator')
-    RETURNING k.id, k.emri, k.emaili, s.emri AS sherbim`;
+        RETURNING k.id, k.emri, k.emaili, k.kodi, s.emri AS sherbim`;
   if (rows.length !== 1) return { rezultati: "ndaluar" };
-  const r = rows[0] as { id: number; emri: string; emaili: string; sherbim: string };
+  const r = rows[0] as { id: number; emri: string; emaili: string; kodi: string | null; sherbim: string };
   return { rezultati: "pranuar", takimi: { ...r, data, ora, zoom } };
 }
