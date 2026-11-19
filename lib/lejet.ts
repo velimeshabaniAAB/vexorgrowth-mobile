@@ -13,6 +13,19 @@ export type KerkesaPanel = {
   linku: string | null;
   mesazhi: string | null;
   statusi: "ne_pritje" | "pranuar" | "refuzuar";
+  data_takimit: string | null;
+  ora_takimit: string | null;
+  zoom_link: string | null;
+};
+
+export type TakimiIPranuar = {
+  id: number;
+  emri: string;
+  emaili: string;
+  sherbim: string;
+  data: string;
+  ora: string;
+  zoom: string;
 };
 
 export async function profiliIm(): Promise<Profil | null> {
@@ -32,7 +45,8 @@ export async function kerkesatEMia(p: Profil): Promise<KerkesaPanel[]> {
   if (p.roli !== "operator") return [];
   const sql = getSql();
   const rows = await sql`
-    SELECT k.id, s.emri AS sherbim, k.emri, k.emaili, k.linku, k.mesazhi, k.statusi
+    SELECT k.id, s.emri AS sherbim, k.emri, k.emaili, k.linku, k.mesazhi, k.statusi,
+      to_char(k.data_takimit, 'YYYY-MM-DD') AS data_takimit, k.ora_takimit, k.zoom_link
     FROM kerkesat_vexor k JOIN sherbimet s ON s.id = k.sherbim_id
     WHERE s.operator_id = ${p.id}
     ORDER BY k.krijuar DESC`;
@@ -52,4 +66,26 @@ export async function ndryshoStatusin(id: string, statusi: string) {
       AND EXISTS (SELECT 1 FROM profilet_vexor WHERE github_id = ${p.id} AND roli = 'operator')
     RETURNING k.id`;
   return rows.length === 1 ? "ruajtur" : "ndaluar";
+}
+
+// Pranon kërkesën dhe cakton takimin. Vetëm operatori që zotëron shërbimin.
+export async function pranoMeTakim(id: string, data: string, ora: string, zoom: string)
+  : Promise<{ rezultati: "hyr" | "ndaluar" | "takimi" | "pranuar"; takimi?: TakimiIPranuar }> {
+  const p = await profiliIm();
+  if (!p) return { rezultati: "hyr" };
+  if (p.roli !== "operator") return { rezultati: "ndaluar" };
+  const dataOk = /^\d{4}-\d{2}-\d{2}$/.test(data);
+  const oraOk = /^([01]\d|2[0-3]):[0-5]\d$/.test(ora);
+  const zoomOk = /^https:\/\/([a-z0-9-]+\.)*zoom\.us\/\S+$/i.test(zoom);
+  if (!/^\d+$/.test(id) || !dataOk || !oraOk || !zoomOk) return { rezultati: "takimi" };
+  const sql = getSql();
+  const rows = await sql`UPDATE kerkesat_vexor k
+    SET statusi = 'pranuar', data_takimit = ${data}, ora_takimit = ${ora}, zoom_link = ${zoom}
+    FROM sherbimet s
+    WHERE k.id = ${Number(id)} AND s.id = k.sherbim_id AND s.operator_id = ${p.id}
+      AND EXISTS (SELECT 1 FROM profilet_vexor WHERE github_id = ${p.id} AND roli = 'operator')
+    RETURNING k.id, k.emri, k.emaili, s.emri AS sherbim`;
+  if (rows.length !== 1) return { rezultati: "ndaluar" };
+  const r = rows[0] as { id: number; emri: string; emaili: string; sherbim: string };
+  return { rezultati: "pranuar", takimi: { ...r, data, ora, zoom } };
 }

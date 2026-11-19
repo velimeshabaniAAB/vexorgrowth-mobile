@@ -3,8 +3,7 @@
 import { redirect } from "next/navigation";
 import { gjejSherbimin } from "@/lib/sherbimet";
 import { ruajKerkesen } from "@/lib/kerkesat";
-import { njoftoMeEmail } from "@/lib/email";
-
+import { njoftoMeEmail, njoftoKreatorinDerguar } from "@/lib/email";
 function lexo(formData: FormData, emri: string, max: number) {
   const v = formData.get(emri);
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -48,8 +47,15 @@ export async function dergoKerkesen(formData: FormData) {
   // 3) Email (opsional): nëse dështon, kërkesa mbetet e ruajtur
   try {
     await njoftoMeEmail({ sherbimi: sherbim!.emri, emri, emaili, linku: linku || null, mesazhi: mesazhi || null });
-  } catch (e) {
+   } catch (e) {
     console.error("Emaili nuk u dërgua:", e);
+  }
+
+  // 4) Email te kreatori: "E morëm kërkesën tënde" (opsional)
+  try {
+    await njoftoKreatorinDerguar({ emri, emaili, sherbimi: sherbim!.emri });
+  } catch (e) {
+    console.error("Emaili te kreatori nuk u dërgua:", e);
   }
 
   redirect(`${faqja}?derguar=1`);

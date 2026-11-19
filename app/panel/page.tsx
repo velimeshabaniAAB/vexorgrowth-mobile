@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Hyrja from "@/components/Hyrja";
 import { profiliIm, kerkesatEMia, type KerkesaPanel, type Profil } from "@/lib/lejet";
-import { ruajStatusin } from "./actions";
+import { ruajStatusin, pranoKerkesen } from "./actions";
+import { dataShqip } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,9 @@ const mesazhet: Record<string, string> = {
   fushe: "ID e kërkesës duhet të jetë numër, statusi pranuar ose refuzuar.",
   ruajtur: "Statusi u ruajt me sukses.",
   databaza: "Nuk u lidhëm me databazën. Kontrollo Neon dhe provo përsëri.",
+  pranuar: "Kërkesa u pranua dhe kreatorit iu dërgua ftesa me email.",
+  "pranuar-pa-email": "Kërkesa u pranua, por emaili te kreatori nuk u dërgua. Kontrollo Resend.",
+  takimi: "Zgjidh datën dhe orën, dhe shkruaj një link Zoom që fillon me https:// (p.sh. https://zoom.us/j/...).",
 };
 
 const etiketat = { ne_pritje: "Në pritje", pranuar: "Pranuar", refuzuar: "Refuzuar" };
@@ -22,6 +26,9 @@ export default async function Panel({ searchParams }: {
   searchParams: Promise<{ m?: string }>;
 }) {
   const { m } = await searchParams;
+  // Linku yt personal i Zoom nga .env.local (mbush fushën automatikisht).
+  const zoomIm = process.env.ZOOM_LINK ?? "";
+  const sot = new Date().toISOString().slice(0, 10);
   let p: Profil | null;
   let kerkesat: KerkesaPanel[] = [];
   try {
@@ -62,11 +69,26 @@ export default async function Panel({ searchParams }: {
           </p>
           {k.mesazhi && <p>{k.mesazhi}</p>}
           <p>Statusi: <strong className={"statusi statusi-" + k.statusi}>{etiketat[k.statusi]}</strong></p>
-          {k.statusi === "ne_pritje" && <form action={ruajStatusin} className="panel-butonat">
-            <input type="hidden" name="id" value={k.id} />
-            <button className="action" type="submit" name="statusi" value="pranuar">Prano</button>
-            <button type="submit" name="statusi" value="refuzuar">Refuzo</button>
-          </form>}
+          {k.statusi === "pranuar" && k.data_takimit && <p className="takimi-info">
+            Takimi: <strong>{dataShqip(k.data_takimit)} · {k.ora_takimit}</strong>
+            {k.zoom_link && <> · <a href={k.zoom_link} target="_blank" rel="noopener noreferrer">Hap Zoom</a></>}
+          </p>}
+          {k.statusi === "ne_pritje" && <>
+            <form action={pranoKerkesen} className="pranimi">
+              <input type="hidden" name="id" value={k.id} />
+              <div className="pranimi-rresht">
+                <label>Data<input type="date" name="data" required min={sot} /></label>
+                <label>Ora<input type="time" name="ora" required defaultValue="14:00" /></label>
+              </div>
+              <label>Linku i Zoom<input type="url" name="zoom" required defaultValue={zoomIm}
+                placeholder="https://zoom.us/j/..." /></label>
+              <button className="action" type="submit">Prano dhe dërgo ftesën</button>
+            </form>
+            <form action={ruajStatusin}>
+              <input type="hidden" name="id" value={k.id} />
+              <button className="refuzo-btn" type="submit" name="statusi" value="refuzuar">Refuzo</button>
+            </form>
+          </>}
         </article>
       ))}
 
