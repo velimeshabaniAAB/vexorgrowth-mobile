@@ -485,3 +485,17 @@ body { padding-bottom: 92px; }
   height: 44px; box-sizing: border-box; padding: 0 0.75rem; border: 1px solid #3a3a3f; border-radius: 12px;
   background: #1a1a1d; color: #f2f2f2; font: inherit; color-scheme: dark;
 }
+
+/* Ylli te kartat e shërbimeve */
+.card-head { position: relative; }
+.ruaj-kompakt { margin-left: auto; align-self: flex-start; }
+.yll-btn {
+  width: 44px; height: 44px; border: none; border-radius: 12px;
+  background: transparent; color: #a3a3a8; font-size: 22px; line-height: 1; cursor: pointer;
+}
+.yll-btn.ruajtur { color: #f2f2f2; }
+.yll-btn:disabled { opacity: 0.6; cursor: wait; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Sherbim } from "@/lib/sherbimet";
 import { Ikona, IKONAT } from "./Ikona";
+import RuajSherbimin from "./RuajSherbimin";
 
 // Ikona sipas kategorisë së shërbimit.
 const ikonat: Record<string, string> = {
@@ -20,6 +21,7 @@ export function KartaSherbimi({ sherbim }: { sherbim: Sherbim }) {
           <span className="badge">{sherbim.kategoria}</span>
           <h2>{sherbim.emri}</h2>
         </div>
+        <RuajSherbimin sherbimId={sherbim.id} kompakt />
       </div>
       <p>Afati: {sherbim.afati} · {sherbim.menyra}</p>
       <div className="card-actions">

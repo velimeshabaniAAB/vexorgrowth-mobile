@@ -1,11 +1,13 @@
 import "server-only";
 import nodemailer from "nodemailer";
 import { Resend } from "resend";
+import { emailVexor, butoni, tabela, ruaj, adresaBaze } from "./emailHtml";
 
 type Emaili = {
   to: string;
   subject: string;
   text: string;
+  html?: string;
   replyTo?: string;
   attachments?: { filename: string; content: Buffer; contentType?: string }[];
 };
@@ -71,6 +73,11 @@ export async function njoftoMeEmail(k: {
       "Hape te paneli për ta pranuar ose refuzuar.",
       "Kliko Reply për t'i shkruar direkt kreatorit.",
     ].join("\n"),
+    html: emailVexor(`Kërkesë e re: ${k.sherbimi}`,
+      `<p style="margin:0"><b>${ruaj(k.emri)}</b> dërgoi një kërkesë.</p>` +
+      tabela([["Email", k.emaili], ["Profili", k.linku ?? "-"], ["Mesazhi", k.mesazhi ?? "-"]]) +
+      butoni("Hape në panel", `${adresaBaze()}/panel`) +
+      `<p style="font-size:13px;color:#71717a">Kliko Reply për t'i shkruar direkt kreatorit.</p>`),
   });
 }
 
@@ -104,6 +111,11 @@ export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; 
       "",
       "Vexor Growth",
     ].join("\n"),
+    html: emailVexor("E morëm kërkesën tënde",
+      `<p style="margin:0">Përshëndetje ${ruaj(k.emri)},</p>` +
+      `<p>Kërkesa jote për <b>${ruaj(k.sherbimi)}</b> u ruajt. Statusi: <b>Në pritje</b>. Do të të kontaktojmë brenda 24 orësh.</p>` +
+      butoni("Ndiq kërkesën", k.linku) +
+      `<p style="font-size:13px;color:#71717a">Linku është personal. Nëse ky email doli te Spam, kliko "Not spam", që të mos e humbasësh ftesën për takim.</p>`),
   });
 }
 
@@ -160,6 +172,13 @@ export async function njoftoKreatorinPranuar(t: {
       "",
       "Vexor Growth",
     ].join("\n"),
+    html: emailVexor("Kërkesa u pranua",
+      `<p style="margin:0">Përshëndetje ${ruaj(t.emri)},</p>` +
+      `<p>Kërkesa jote për <b>${ruaj(t.sherbim)}</b> u pranua. Ja takimi ynë:</p>` +
+      tabela([["Data", dataShqip(t.data)], ["Ora", `${t.ora} (45 min)`], ["Ku", "Zoom"]]) +
+      butoni("Hyr në Zoom", t.zoom) +
+      (t.linku ? butoni("Shto në kalendar", `${t.linku}/kalendari`, false) + butoni("Ndiq kërkesën", t.linku, false) : "") +
+      `<p style="font-size:13px;color:#71717a">Takimin mund ta shtosh në kalendar edhe me skedarin takimi.ics bashkëngjitur.</p>`),
     attachments: [{
       filename: "takimi.ics",
       content: Buffer.from(krijoIcs(t), "utf-8"),
@@ -167,7 +186,6 @@ export async function njoftoKreatorinPranuar(t: {
     }],
   });
 }
-
 
 // 3) "E humbe emailin?": i dërgon kreatorit linqet e kërkesave të tij.
 export async function dergoLinqetEKerkesave(emaili: string, lista: { sherbim: string; linku: string; statusi: string }[]) {
@@ -187,5 +205,10 @@ export async function dergoLinqetEKerkesave(emaili: string, lista: { sherbim: st
       "",
       "Vexor Growth",
     ].join("\n"),
+    html: emailVexor("Kërkesat e tua",
+      `<p style="margin:0">Këto janë linqet personale të kërkesave të tua:</p>` +
+      lista.map((k) => `<p style="margin:14px 0 4px"><b>${ruaj(k.sherbim)}</b> · ${ruaj(statusi[k.statusi] ?? k.statusi)}</p>` +
+        butoni("Hape kërkesën", k.linku, false)).join("") +
+      `<p style="font-size:13px;color:#71717a">Nëse nuk e kërkove ti këtë email, mund ta injorosh.</p>`),
   });
 }
