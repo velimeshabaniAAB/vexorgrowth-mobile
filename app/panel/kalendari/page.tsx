@@ -46,9 +46,9 @@ export default async function Kalendari({ searchParams }: {
   const takimetESotme = takimetEJaves.filter((t) => t.data === dita);
   const kaTakim = new Set(takimetEJaves.map((t) => t.data));
 
-  return <main>
-    <p className="eyebrow">Operatori</p>
-    <h1>Kalendari</h1>
+  return <main className="vx-faqe vx-panel">
+    <p className="vx-etiketa">Operatori</p>
+    <h1 className="vx-h1">Kalendari</h1>
     <div className="kal-muaji">
       <Link href={`/panel/kalendari?dita=${shtoDite(hena, -7)}`} aria-label="Java e kaluar">←</Link>
       <span>{MUAJT[mu - 1]} {v}</span>
@@ -67,7 +67,9 @@ export default async function Kalendari({ searchParams }: {
       ))}
     </nav>
 
-    <p className="eyebrow panel-titull">Takimet · {dataShqip(dita)}</p>
+    <div className="vx-kal-kolonat">
+    <section>
+    <p className="vx-etiketa panel-titull">Takimet · {dataShqip(dita)}</p>
     {takimetESotme.length === 0 ? <p className="panel-bosh">Nuk ka takime këtë ditë.</p> :
       takimetESotme.map((t) => (
         <article key={t.id} className="kal-takim">
@@ -80,7 +82,10 @@ export default async function Kalendari({ searchParams }: {
         </article>
       ))}
 
-    <p className="eyebrow panel-titull">Detyrat</p>
+    </section>
+
+    <section className="vx-kal-detyrat">
+    <p className="vx-etiketa panel-titull">Detyrat</p>
     {m && mesazhet[m] && <p role="status" className="panel-mesazh" data-m="fushe">{mesazhet[m]}</p>}
     <ul className="kal-detyrat">
       {lista.length === 0 && <li className="panel-bosh">Nuk ke detyra. Shto të parën më poshtë.</li>}
@@ -106,9 +111,12 @@ export default async function Kalendari({ searchParams }: {
     <form action={shtoDetyren} className="kal-shto">
       <input type="hidden" name="dita" value={dita} />
       <label htmlFor="titulli">Detyrë e re</label>
-      <input id="titulli" name="titulli" required maxLength={200} placeholder="p.sh. Përgatit auditimin para takimit" />      <label htmlFor="afati">Afati (opsional)</label>
+      <input id="titulli" name="titulli" required maxLength={200} placeholder="p.sh. Përgatit auditimin para takimit" />
+      <label htmlFor="afati">Afati (opsional)</label>
       <input id="afati" name="afati" type="date" />
       <button className="action" type="submit">+ Shto detyrën</button>
     </form>
+    </section>
+    </div>
   </main>;
 }

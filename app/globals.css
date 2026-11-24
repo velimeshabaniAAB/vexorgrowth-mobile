@@ -760,3 +760,40 @@ body { padding-bottom: 92px; }
   .vx-shirit { margin: 0 calc(50% - 50vw); }
   .vx-seksion { margin-top: 64px; }
 }
+
+/* ================= Paneli dhe kalendari (dizajni final) ================= */
+.vx-panel .panel-krye { align-items: flex-end; margin-bottom: 8px; }
+.vx-panel .panel-krye .vx-h1 { font-size: clamp(30px, 4.4vw, 52px); margin-top: 4px; }
+.vx-panel .dil-btn { border-radius: 999px; padding: 0 18px; }
+.vx-panel .panel-numrat { gap: 10px; margin: 18px 0 8px; }
+.vx-panel .panel-numrat div { padding: 16px; border-radius: 20px; background: var(--surface); border: 1px solid #26262A; }
+.vx-panel .panel-numrat div:first-child { background: var(--silver); border: none; color: #0A0A0B; }
+.vx-panel .panel-numrat div:first-child span { color: #3F3F46; }
+.vx-panel .panel-numrat strong { font-size: clamp(24px, 3vw, 36px); font-weight: 600; }
+.vx-panel .panel-numrat span { font-size: 13px; color: #A3A3A8; }
+.vx-panel .panel-titull { margin: 32px 0 12px !important; }
+.vx-panel-rrjeta { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); align-items: start; }
+.vx-panel .panel-karta {
+  margin: 0; padding: 22px; border-radius: 22px; background: var(--surface); border: 1px solid #26262A;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.vx-panel .panel-karta h3 { font-size: 19px; font-weight: 600; }
+.vx-panel .panel-karta-mesazhi { padding: 12px 14px; border-radius: 14px; background: #0B0B0D; }
+.vx-panel .pranimi input { border-radius: 12px; }
+.vx-panel .refuzo-btn { width: 100%; min-height: 46px; border-radius: 999px; }
+.vx-panel .panel-prova { margin-top: 32px; }
+
+.vx-panel .kal-muaji { margin: 18px 0 12px; font-weight: 600; }
+.vx-panel .kal-java { gap: 8px; }
+.vx-panel .kal-dita { padding: 12px 0; border-radius: 16px; border: 1px solid #26262A; background: var(--surface); }
+.vx-panel .kal-dita.zgjedhur { background: var(--silver); border: none; }
+.vx-kal-kolonat { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: flex-start; }
+.vx-kal-kolonat > section { flex: 1.6 1 420px; min-width: 0; }
+.vx-kal-kolonat > .vx-kal-detyrat { flex: 1 1 320px; }
+.vx-panel .kal-takim { padding: 18px; border-radius: 20px; background: var(--surface); border: 1px solid #26262A; }
+.vx-panel .kal-detyrat { border-radius: 20px; background: var(--surface); border-color: #26262A; }
+
+@media (min-width: 900px) {
+  .vx-panel .kal-dita { padding: 18px 0; }
+  .vx-panel .kal-dita strong { font-size: 24px; }
+}

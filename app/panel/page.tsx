@@ -95,11 +95,11 @@ export default async function Panel({ searchParams }: {
     </article>
   );
 
-  return <main>
+  return <main className="vx-faqe vx-panel">
     <header className="panel-krye">
       <div>
-        <p className="eyebrow">Hapësira e punës</p>
-        <h1>Paneli i operatorit</h1>
+        <p className="vx-etiketa">Hapësira e punës</p>
+        <h1 className="vx-h1">Paneli i operatorit</h1>
         <p className="panel-krye-nen">{p.emri} · operator</p>
       </div>
       <Hyrja brenda klasa="dil-btn" />
@@ -114,13 +114,13 @@ export default async function Panel({ searchParams }: {
       <div><strong>{numri("refuzuar")}</strong><span className="statusi-refuzuar">Refuzuar</span></div>
     </div>
 
-    <p className="eyebrow panel-titull">Kërkesat e reja</p>
+    <p className="vx-etiketa panel-titull">Kërkesat e reja</p>
     {teReja.length === 0 ? <p className="panel-bosh">Nuk ka kërkesa të reja.</p>
-      : teReja.map((k) => <Karta key={k.id} k={k} />)}
+      : <div className="vx-panel-rrjeta">{teReja.map((k) => <Karta key={k.id} k={k} />)}</div>}
 
     {teTjera.length > 0 && <>
-      <p className="eyebrow panel-titull">Të përfunduara</p>
-      {teTjera.map((k) => <Karta key={k.id} k={k} />)}
+      <p className="vx-etiketa panel-titull">Të përfunduara</p>
+      <div className="vx-panel-rrjeta">{teTjera.map((k) => <Karta key={k.id} k={k} />)}</div>
     </>}
 
     {/* Java 5: prova e lejeve (mbetet për demonstrim në klasë) */}
