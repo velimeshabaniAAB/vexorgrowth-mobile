@@ -69,6 +69,13 @@ export default async function Kerkesa({
       <h1>Kërkesë për: {sherbim.emri}</h1>
       <p>Na trego kush je dhe ku të gjen audienca.</p>
 
+      <ol className="vx-si-funksionon" aria-label="Si funksionon kërkesa">
+        <li><b>1</b><span><strong>Dërgon kërkesën</strong>Zgjedh shërbimin, ose kërko një bisedë konsultuese.</span></li>
+        <li><b>2</b><span><strong>Merr email nga ne</strong>Të shkruajmë për të caktuar takimin.</span></li>
+        <li><b>3</b><span><strong>Takim në Zoom</strong>Flasim gjerësisht për ty dhe produktin.</span></li>
+        <li><b>4</b><span><strong>Merr ofertën</strong>Çmim i qartë, pa detyrim. Pastaj fillojmë.</span></li>
+      </ol>
+
       <form className="form" action={dergoKerkesen}>
         <input type="hidden" name="sherbimId" value={sherbim.id} />
         <fieldset className="lloji-zgjedhje">

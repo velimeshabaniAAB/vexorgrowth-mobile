@@ -515,3 +515,258 @@ body { padding-bottom: 92px; }
   background: var(--silver); color: #0A0A0B;
 }
 .panel-numrat { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* ================= Dizajni final (demoja): telefon + laptop ================= */
+.koka-web { display: none; }
+.vx-faqe { gap: 0; }
+.vx-etiketa {
+  display: flex; align-items: center; gap: 10px; margin: 0 0 12px !important;
+  font-size: 11px !important; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #A3A3A8 !important;
+}
+.vx-etiketa::before { content: ""; width: 24px; height: 1px; background: #5A5A60; }
+.vx-etiketa-vogel { font-size: 11px !important; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #A3A3A8 !important; }
+.vx-h1 { margin: 0; font-size: clamp(34px, 5.4vw, 64px); line-height: 1.04; font-weight: 600; letter-spacing: -0.02em; }
+.vx-h1 span { color: #8E8E93; }
+.vx-h2 { margin: 0 0 18px; font-size: clamp(26px, 3.4vw, 42px); line-height: 1.1; font-weight: 600; letter-spacing: -0.015em; }
+.vx-lead { font-size: 16px !important; line-height: 1.65 !important; color: #C4C4C8 !important; max-width: 540px; }
+.vx-seksion { margin-top: 48px; }
+
+.vx-btn, .vx-btn-zi {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 50px; padding: 0 24px; border-radius: 999px; border: none; cursor: pointer;
+  font: inherit; font-size: 15px; font-weight: 600; text-decoration: none;
+  background: var(--silver); color: #0A0A0B;
+}
+.vx-btn-ghost { background: transparent; border: 1px solid #3A3A3F; color: var(--text); }
+.vx-btn-zi { background: #0A0A0B; color: #fff; }
+.vx-butonat { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.vx-butonat .vx-btn { flex: 1 1 200px; }
+
+/* Koka në telefon */
+.vx-koka-tel { display: flex; justify-content: space-between; align-items: center; }
+.vx-koka-tel img { height: 36px; width: auto; }
+.vx-rreth-btn {
+  width: 44px; height: 44px; border-radius: 22px; display: grid; place-items: center;
+  background: #141416; border: 1px solid #2A2A2E;
+}
+
+/* Hero */
+.vx-hero { display: flex; flex-wrap: wrap; align-items: center; gap: 28px; padding: 32px 0 36px; }
+.vx-hero-teksti { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+.vx-hero-logo { flex: 1 1 300px; width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
+.vx-pill {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px;
+  border-radius: 15px; background: #141416; border: 1px solid #2A2A2E;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #C4C4C8;
+}
+.vx-pill i { width: 6px; height: 6px; border-radius: 3px; background: var(--silver); }
+
+/* Shiriti i niche-ve */
+@keyframes vx-leviz { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.vx-shirit {
+  margin: 0 -20px; padding: 18px 0; overflow: hidden;
+  background: #0B0B0D; border-top: 1px solid #1A1A1D; border-bottom: 1px solid #1A1A1D;
+}
+.vx-shirit-levizje { display: flex; width: max-content; animation: vx-leviz 30s linear infinite; }
+.vx-shirit-levizje > div { display: flex; }
+.vx-shirit span {
+  display: inline-flex; align-items: center; gap: 14px; padding-right: 14px; white-space: nowrap;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #A3A3A8;
+}
+.vx-shirit i { font-style: normal; color: #4A4A50; }
+@media (prefers-reduced-motion: reduce) { .vx-shirit-levizje { animation: none; } }
+
+/* Për kë është */
+.vx-thenie { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 12px; }
+.vx-thenie figure {
+  margin: 0; min-height: 180px; padding: 22px; border-radius: 22px; background: var(--surface); border: 1px solid #26262A;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 20px; color: #E4E4E7;
+}
+.vx-thenie blockquote { margin: 0; font-size: 16px; line-height: 1.5; font-weight: 500; color: var(--text); }
+
+/* Kalkulatori */
+.vx-kalk {
+  display: flex; flex-wrap: wrap; gap: 28px; padding: clamp(18px, 4vw, 44px);
+  border-radius: 28px; background: #0E0E10; border: 1px solid #26262A;
+}
+.vx-kalk-kontrollet { flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+.vx-kalk-kontrollet .vx-h2 { margin: 0; }
+.vx-rreshqites > div { display: flex; justify-content: space-between; align-items: baseline; }
+.vx-rreshqites label { font-size: 14px; color: #C4C4C8; }
+.vx-rreshqites strong { font-size: 17px; }
+.vx-rreshqites input { width: 100%; height: 40px; margin: 0; accent-color: #E4E4E7; }
+.vx-kalk-produktet { border: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.vx-kalk-produktet legend { padding: 0; margin-bottom: 10px; font-size: 14px; color: #C4C4C8; }
+.vx-kalk-produktet button {
+  min-height: 58px; border-radius: 16px; border: 1px solid #2A2A2E; background: #141416; color: #D4D4D8;
+  font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer;
+}
+.vx-kalk-produktet button strong { font-size: 13px; }
+.vx-kalk-produktet button span { font-size: 12px; color: #8E8E93; }
+.vx-kalk-produktet button.aktiv { border: 1.5px solid #F2F2F2; background: #1C1C1F; color: #F2F2F2; }
+.vx-kalk-rezultati {
+  flex: 1 1 300px; min-width: 0; padding: clamp(20px, 3vw, 32px); border-radius: 24px;
+  background: var(--silver); color: #0A0A0B; display: flex; flex-direction: column; justify-content: center; gap: 10px;
+}
+.vx-kalk-rezultati > span { font-size: 13px; font-weight: 600; color: #3F3F46; }
+.vx-kalk-shuma { font-size: clamp(46px, 6vw, 72px); line-height: 1; font-weight: 600; letter-spacing: -0.03em; }
+.vx-kalk-detajet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.vx-kalk-detajet div { border-radius: 14px; background: rgba(255, 255, 255, 0.45); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.vx-kalk-detajet span { font-size: 11px; color: #3F3F46; }
+.vx-kalk-detajet b { font-size: 18px; }
+.vx-kalk-rezultati p { color: #3F3F46 !important; font-size: 12px !important; }
+
+/* Procesi */
+.vx-procesi { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 12px; }
+.vx-procesi li {
+  padding: 22px; border-radius: 22px; background: var(--surface); border: 1px solid #26262A;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.vx-procesi strong { font-size: 18px; margin-top: 4px; }
+.vx-procesi p { font-size: 14px !important; flex: 1; }
+.vx-nr {
+  width: 42px; height: 42px; border-radius: 21px; border: 1px solid #3A3A3F;
+  display: grid; place-items: center; font-size: 13px; font-weight: 700;
+}
+.vx-nr-aktiv { background: var(--silver); color: #0A0A0B; border: none; }
+.vx-ti {
+  align-self: flex-start; padding: 5px 12px; border-radius: 14px; background: #1C1C1F; border: 1px solid #2E2E33;
+  font-size: 12px; font-weight: 600;
+}
+.vx-ti-aktiv { background: var(--silver); color: #0A0A0B; border: none; }
+
+/* CTA */
+.vx-cta {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;
+  padding: clamp(28px, 5vw, 60px); border-radius: 30px; background: var(--silver); color: #0A0A0B;
+}
+.vx-cta h2 { margin: 0; font-size: clamp(32px, 4.4vw, 56px); line-height: 1.03; font-weight: 600; letter-spacing: -0.02em; }
+
+/* Shërbimet */
+.vx-sherbimet-koka { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 8px 0 28px; }
+.vx-sherbimet-koka .vx-h1 { margin-bottom: 10px; }
+.vx-tabet { display: flex; gap: 4px; padding: 4px; border-radius: 27px; background: #141416; border: 1px solid #26262A; }
+.vx-tabet a { min-height: 44px; padding: 0 22px; border-radius: 22px; display: flex; align-items: center; font-size: 14px; color: #C4C4C8; }
+.vx-tabet a.aktiv { background: var(--silver); color: #0A0A0B; font-weight: 700; }
+.vx-rrjeta { display: grid; gap: 26px 14px; }
+.vx-rrjeta-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); }
+.vx-rrjeta-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.vx-oferta {
+  position: relative; padding: 24px 20px 20px; border-radius: 24px; background: var(--surface); border: 1px solid #26262A;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.vx-oferta-vecant { border: 1.5px solid #A9A9B0; }
+.vx-shenja {
+  position: absolute; top: -13px; left: 20px; padding: 5px 12px; border-radius: 13px;
+  background: var(--silver); color: #0A0A0B; font-size: 12px; font-weight: 700;
+}
+.vx-oferta-koka { display: flex; justify-content: space-between; gap: 10px; }
+.vx-oferta-koka h2 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+.vx-oferta-koka p { font-size: 14px !important; }
+.vx-thekso {
+  border: 1px dashed #4A4A50; border-radius: 14px; padding: 11px 14px;
+  font-size: 13px !important; font-weight: 600; color: var(--text) !important;
+}
+.vx-cmimet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.vx-cmimet div { border: 1px solid #26262A; border-radius: 14px; background: #0B0B0D; padding: 11px 12px; display: flex; flex-direction: column; gap: 3px; }
+.vx-cmimet span { font-size: 11px; color: #A3A3A8; }
+.vx-cmimet strong { font-size: 14px; }
+.vx-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.vx-lista li { position: relative; padding-left: 26px; font-size: 14px; line-height: 1.45; }
+.vx-lista li::before {
+  content: ""; position: absolute; left: 2px; top: 3px; width: 12px; height: 7px;
+  border-left: 2.4px solid #E4E4E7; border-bottom: 2.4px solid #E4E4E7; transform: rotate(-45deg);
+}
+.vx-oferta-butonat { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: auto; }
+.vx-oferta-butonat .vx-btn { padding: 0 12px; font-size: 14px; }
+
+/* Dritarja e detajeve */
+.vx-dritare {
+  width: min(760px, calc(100% - 32px)); max-height: calc(100dvh - 48px); padding: 0;
+  border: 1px solid #3A3A3F; border-radius: 26px; background: var(--surface); color: var(--text);
+}
+.vx-dritare::backdrop { background: rgba(0, 0, 0, 0.72); }
+.vx-dritare-brenda { padding: 26px; display: flex; flex-direction: column; gap: 20px; }
+.vx-dritare-koka { display: flex; justify-content: space-between; gap: 16px; }
+.vx-dritare-koka h2 { font-size: 26px; margin: 6px 0; }
+.vx-dritare-koka p { margin: 0; color: var(--muted); font-size: 14px; }
+.vx-mbyll {
+  flex: none; width: 44px; height: 44px; border-radius: 22px; border: 1px solid #3A3A3F;
+  background: transparent; color: var(--text); display: grid; place-items: center; cursor: pointer;
+}
+.vx-grupet { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px 24px; }
+.vx-grupet strong { display: block; margin-bottom: 10px; font-size: 15px; }
+.vx-grupet .vx-lista li { font-size: 13px; color: #C4C4C8; }
+.vx-dritare-fund {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+  border-top: 1px solid #26262A; padding-top: 18px; font-size: 13px; color: #8E8E93;
+}
+
+/* Marketingu */
+.vx-marketingu { display: flex; flex-wrap: wrap; gap: 28px; }
+.vx-marketingu > div:first-child { flex: 1 1 300px; }
+.vx-marketingu-kartat { flex: 2 1 520px; min-width: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px; }
+.vx-marketingu-kartat div { padding: 18px; border-radius: 18px; background: var(--surface); border: 1px solid #26262A; display: flex; flex-direction: column; gap: 6px; }
+.vx-marketingu-kartat strong { font-size: 15px; }
+.vx-marketingu-kartat span { font-size: 13px; color: #A3A3A8; line-height: 1.5; }
+
+/* Rreth nesh: pyetjet dhe kontaktet */
+.vx-faq details { border-bottom: 1px solid #1F1F23; }
+.vx-faq details:first-child { border-top: 1px solid #1F1F23; }
+.vx-faq summary {
+  list-style: none; cursor: pointer; min-height: 60px; padding: 16px 0;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 16px; font-weight: 600;
+}
+.vx-faq summary::-webkit-details-marker { display: none; }
+.vx-faq summary::after { content: "+"; font-size: 24px; font-weight: 300; }
+.vx-faq details[open] summary::after { content: "−"; }
+.vx-faq details p { padding: 0 32px 18px 0; }
+.vx-kontaktet { margin-top: 36px; padding: 22px; border-radius: 24px; background: var(--surface); border: 1px solid #26262A; }
+.vx-kontaktet-koka { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px; margin-bottom: 14px; }
+.vx-kontaktet-koka .vx-etiketa { margin: 0 !important; }
+.vx-kontaktet-koka span { font-size: 14px; color: #A3A3A8; }
+.vx-kontaktet-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px; }
+.vx-kontakt {
+  display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px 14px; border-radius: 18px;
+  background: #0B0B0D; border: 1px solid #26262A; color: var(--text);
+}
+.vx-kontakt-ikona {
+  flex: none; width: 38px; height: 38px; border-radius: 19px; background: #1C1C1F; border: 1px solid #2E2E33;
+  display: grid; place-items: center; font-weight: 700;
+}
+.vx-kontakt span:last-child { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.vx-kontakt small { font-size: 12px; color: #A3A3A8; }
+.vx-kontakt b { font-size: 14px; overflow-wrap: anywhere; }
+
+/* Formulari: si funksionon kërkesa */
+.vx-si-funksionon {
+  list-style: none; margin: 8px 0; padding: 18px; border-radius: 20px; background: var(--surface); border: 1px solid #26262A;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.vx-si-funksionon li { display: flex; gap: 14px; align-items: flex-start; }
+.vx-si-funksionon b {
+  flex: none; width: 32px; height: 32px; border-radius: 16px; border: 1px solid #3A3A3F;
+  display: grid; place-items: center; font-size: 14px;
+}
+.vx-si-funksionon li:first-child b { background: var(--silver); color: #0A0A0B; border: none; }
+.vx-si-funksionon span { display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.vx-si-funksionon strong { font-size: 15px; color: var(--text); }
+
+/* ---------- Laptop ---------- */
+@media (min-width: 900px) {
+  body { padding-bottom: 0; }
+  .navigimi { display: none; }
+  .vx-koka-tel { display: none; }
+  .koka-web { display: block; position: sticky; top: 0; z-index: 40; background: rgba(5, 5, 6, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #1A1A1D; }
+  .koka-web-brenda { max-width: 1080px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .koka-web-logo img { height: 42px; width: auto; display: block; }
+  .koka-web-menu { display: flex; gap: 4px; }
+  .koka-web-lidhja { height: 40px; padding: 0 16px; border-radius: 20px; display: flex; align-items: center; font-size: 14px; color: #A3A3A8; }
+  .koka-web-lidhja.aktive { background: #141416; color: #F2F2F2; font-weight: 600; }
+  .koka-web-cta { height: 44px; padding: 0 22px; border-radius: 22px; display: flex; align-items: center; background: var(--silver); color: #0A0A0B; font-size: 14px; font-weight: 700; }
+  .koka-web-roli { padding: 5px 12px; border-radius: 13px; border: 1px solid #3A3A3F; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #C4C4C8; }
+  main { max-width: 760px; padding-top: 40px; }
+  main.vx-faqe { max-width: 1080px; padding: 32px 24px 64px; }
+  .vx-shirit { margin: 0 calc(50% - 50vw); }
+  .vx-seksion { margin-top: 64px; }
+}

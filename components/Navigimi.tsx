@@ -33,27 +33,52 @@ export default function Navigimi() {
   const lidhjet = rruga.startsWith("/panel") ? operatori : kreatori;
 
   // Aktive: përputhje e saktë për "/", ndryshe fillimi i rrugës.
-    // "/kerkesa/[kodi]" (faqja personale) e ndez edhe "Kërkesat".
-    // "/kerkesa/[kodi]" (faqja personale) e ndez edhe "Kërkesat".
+  // "/kerkesa/[kodi]" (faqja personale) e ndez edhe "Kërkesat".
   const eshteAktive = (href: string) =>
     href === "/" ? rruga === "/"
       : href === "/panel" ? rruga === "/panel"
       : rruga === href || rruga.startsWith(href + "/") || (href === "/kerkesat" && rruga.startsWith("/kerkesa/"));
+  const ePanelit = rruga.startsWith("/panel");
   return (
-    <nav className="navigimi" aria-label="Menuja kryesore">
-      {lidhjet.map((l) => {
-        const aktive = eshteAktive(l.href);
-        return (
-          <Link key={l.href + l.emri} href={l.href} className={aktive ? "nav-lidhja aktive" : "nav-lidhja"}
-            aria-current={aktive ? "page" : undefined}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d={l.ikona} />
-            </svg>
-            {l.emri}
+    <>
+      {/* Laptop: koka lart me logon (në telefon fshihet me CSS) */}
+      <header className="koka-web">
+        <div className="koka-web-brenda">
+          <Link href="/" className="koka-web-logo" aria-label="Vexor Growth, ballina">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-horizontal.png" alt="Vexor Growth" width={130} height={42} />
           </Link>
-        );
-      })}
-    </nav>
+          <nav className="koka-web-menu" aria-label="Menuja kryesore">
+            {lidhjet.map((l) => {
+              const aktive = eshteAktive(l.href);
+              return (
+                <Link key={l.href + l.emri} href={l.href} className={aktive ? "koka-web-lidhja aktive" : "koka-web-lidhja"}
+                  aria-current={aktive ? "page" : undefined}>{l.emri}</Link>
+              );
+            })}
+          </nav>
+          {ePanelit
+            ? <span className="koka-web-roli">Operator</span>
+            : <Link className="koka-web-cta" href="/sherbimet">Dërgo kërkesë</Link>}
+        </div>
+      </header>
+
+      {/* Telefon: menuja poshtë */}
+      <nav className="navigimi" aria-label="Menuja kryesore">
+        {lidhjet.map((l) => {
+          const aktive = eshteAktive(l.href);
+          return (
+            <Link key={l.href + l.emri} href={l.href} className={aktive ? "nav-lidhja aktive" : "nav-lidhja"}
+              aria-current={aktive ? "page" : undefined}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d={l.ikona} />
+              </svg>
+              {l.emri}
+            </Link>
+          );
+        })}
+      </nav>
+    </>
   );
 }
