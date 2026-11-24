@@ -517,7 +517,6 @@ body { padding-bottom: 92px; }
 .panel-numrat { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 /* ================= Dizajni final (demoja): telefon + laptop ================= */
-.koka-web { display: none; }
 .vx-faqe { gap: 0; }
 .vx-etiketa {
   display: flex; align-items: center; gap: 10px; margin: 0 0 12px !important;
@@ -753,20 +752,11 @@ body { padding-bottom: 92px; }
 .vx-si-funksionon strong { font-size: 15px; color: var(--text); }
 
 /* ---------- Laptop ---------- */
+/* Menuja mbetet poshtë si në telefon (në qendër); faqet zgjerohen. */
 @media (min-width: 900px) {
-  body { padding-bottom: 0; }
-  .navigimi { display: none; }
-  .vx-koka-tel { display: none; }
-  .koka-web { display: block; position: sticky; top: 0; z-index: 40; background: rgba(5, 5, 6, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #1A1A1D; }
-  .koka-web-brenda { max-width: 1080px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-  .koka-web-logo img { height: 42px; width: auto; display: block; }
-  .koka-web-menu { display: flex; gap: 4px; }
-  .koka-web-lidhja { height: 40px; padding: 0 16px; border-radius: 20px; display: flex; align-items: center; font-size: 14px; color: #A3A3A8; }
-  .koka-web-lidhja.aktive { background: #141416; color: #F2F2F2; font-weight: 600; }
-  .koka-web-cta { height: 44px; padding: 0 22px; border-radius: 22px; display: flex; align-items: center; background: var(--silver); color: #0A0A0B; font-size: 14px; font-weight: 700; }
-  .koka-web-roli { padding: 5px 12px; border-radius: 13px; border: 1px solid #3A3A3F; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #C4C4C8; }
   main { max-width: 760px; padding-top: 40px; }
   main.vx-faqe { max-width: 1080px; padding: 32px 24px 64px; }
+  .vx-koka-tel img { height: 42px; }
   .vx-shirit { margin: 0 calc(50% - 50vw); }
   .vx-seksion { margin-top: 64px; }
 }
