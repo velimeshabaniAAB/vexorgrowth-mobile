@@ -1,8 +1,6 @@
 import Link from "next/link";
-import { KartaSherbimi } from "@/components/KartaSherbimi";
 import DetajetOferte from "@/components/DetajetOferte";
 import RuajSherbimin from "@/components/RuajSherbimin";
-import { lexoSherbimet, type Sherbim } from "@/lib/sherbimet";
 import { OFERTA, MARKETINGU, type Oferta } from "@/lib/oferta";
 
 export const dynamic = "force-dynamic";
@@ -41,16 +39,6 @@ export default async function Sherbimet({ searchParams }: {
   const { lloji } = await searchParams;
   const paketat = lloji === "paketat";
 
-  // Shërbimet e vjetra nga databaza (Auditim, Ebook, Lansim) mbeten poshtë.
-  let teTjera: Sherbim[] = [];
-  let gabimDb = false;
-  try {
-    const idTeReja = new Set(OFERTA.map((o) => o.id));
-    teTjera = (await lexoSherbimet()).filter((s) => !idTeReja.has(s.id));
-  } catch {
-    gabimDb = true;
-  }
-
   const lista = OFERTA.filter((o) => o.lloji === (paketat ? "paketa" : "individuale"));
 
   return (
@@ -81,17 +69,6 @@ export default async function Sherbimet({ searchParams }: {
           {MARKETINGU.map(([t, p]) => <div key={t}><strong>{t}</strong><span>{p}</span></div>)}
         </div>
       </section>
-
-      {(teTjera.length > 0 || gabimDb) && (
-        <section className="vx-seksion">
-          <p className="vx-etiketa">Shërbime të tjera</p>
-          {gabimDb ? <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p> : (
-            <div className="trip-list vx-rrjeta-2">
-              {teTjera.map((s) => <KartaSherbimi key={s.id} sherbim={s} />)}
-            </div>
-          )}
-        </section>
-      )}
     </main>
   );
 }
