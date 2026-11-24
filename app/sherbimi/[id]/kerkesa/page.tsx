@@ -19,10 +19,11 @@ export default async function Kerkesa({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ derguar?: string; gabim?: string; kodi?: string }>;
+  searchParams: Promise<{ derguar?: string; gabim?: string; kodi?: string; lloji?: string }>;
 }) {
   const { id } = await params;
-  const { derguar, gabim, kodi } = await searchParams;
+  const { derguar, gabim, kodi, lloji } = await searchParams;
+  const konsulte = lloji === "konsulte";
 
   let sherbim;
   try {
@@ -47,9 +48,11 @@ export default async function Kerkesa({
             <Ikona d={IKONAT.check} size={34} sw={2.4} />
           </div>
           <h1>Kërkesa u dërgua</h1>
-          <p>Faleminderit! Kërkesa për <strong>{sherbim.emri}</strong> u ruajt.</p>
+          <p>Faleminderit! Kërkesa për <strong>{konsulte ? "bisedë konsultuese" : sherbim.emri}</strong> u ruajt.</p>
           <p className="status-pill">Statusi: Në pritje</p>
-          <p>Do të të kontaktojmë brenda 24 orësh në emailin që na dhe.</p>
+          <p>{konsulte
+            ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom."
+            : "Do të të kontaktojmë brenda 24 orësh në emailin që na dhe."}</p>
           {kodi && /^[A-Za-z0-9_-]{8,40}$/.test(kodi) && (
            <Link className="action" href={`/kerkesa/${kodi}`}>Ndiq kërkesën</Link>
           )}
@@ -68,6 +71,17 @@ export default async function Kerkesa({
 
       <form className="form" action={dergoKerkesen}>
         <input type="hidden" name="sherbimId" value={sherbim.id} />
+        <fieldset className="lloji-zgjedhje">
+          <legend>Çfarë kërkon?</legend>
+          <label className="lloji-opsion">
+            <input type="radio" name="lloji" value="sherbim" defaultChecked />
+            <span><strong>E di çfarë më duhet</strong>Dërgo kërkesë për këtë shërbim.</span>
+          </label>
+          <label className="lloji-opsion">
+            <input type="radio" name="lloji" value="konsulte" />
+            <span><strong>Nuk jam ende e sigurt</strong>Kërko një bisedë konsultuese dhe të ndihmojmë të zgjedhësh.</span>
+          </label>
+        </fieldset>
         <label className="field">
           <span>Emri dhe mbiemri</span>
           <input name="emri" type="text" required maxLength={120} autoComplete="name"

@@ -2,6 +2,9 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { getSql } from "./db";
 
+// "sherbim" = kërkesë për shërbimin, "konsulte" = bisedë konsultuese.
+export type Lloji = "sherbim" | "konsulte";
+
 // Ruan një kërkesë të re në tabelën kerkesat_vexor (statusi: ne_pritje)
 // dhe kthen kodin personal për linkun /kerkesa/[kodi].
 export async function ruajKerkesen(k: {
@@ -10,13 +13,14 @@ export async function ruajKerkesen(k: {
   emaili: string;
   linku: string | null;
   mesazhi: string | null;
+  lloji: Lloji;
 }): Promise<string> {
   const sql = getSql();
   // 12 shkronja të rastësishme: nuk mund të gjenden me hamendje.
   const kodi = randomBytes(9).toString("base64url");
   await sql`
-    INSERT INTO kerkesat_vexor (sherbim_id, emri, emaili, linku, mesazhi, kodi)
-    VALUES (${k.sherbimId}, ${k.emri}, ${k.emaili}, ${k.linku}, ${k.mesazhi}, ${kodi})
+    INSERT INTO kerkesat_vexor (sherbim_id, emri, emaili, linku, mesazhi, kodi, lloji)
+    VALUES (${k.sherbimId}, ${k.emri}, ${k.emaili}, ${k.linku}, ${k.mesazhi}, ${kodi}, ${k.lloji})
   `;
   return kodi;
 }
@@ -26,6 +30,7 @@ export type KerkesaIme = {
   sherbim: string;
   emri: string;
   statusi: "ne_pritje" | "pranuar" | "refuzuar";
+  lloji: Lloji;
   derguar: string;
   pranuar: string | null;
   data_takimit: string | null;
@@ -38,7 +43,7 @@ export async function gjejMeKod(kodi: string): Promise<KerkesaIme | undefined> {
   if (!/^[A-Za-z0-9_-]{8,40}$/.test(kodi)) return undefined;
   const sql = getSql();
   const rows = await sql`
-    SELECT k.id, s.emri AS sherbim, k.emri, k.statusi,
+    SELECT k.id, s.emri AS sherbim, k.emri, k.statusi, k.lloji,
       to_char(k.krijuar AT TIME ZONE 'Europe/Belgrade', 'DD.MM.YYYY, HH24:MI') AS derguar,
       to_char(k.pranuar_me AT TIME ZONE 'Europe/Belgrade', 'DD.MM.YYYY, HH24:MI') AS pranuar,
       to_char(k.data_takimit, 'YYYY-MM-DD') AS data_takimit, k.ora_takimit, k.zoom_link

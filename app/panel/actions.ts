@@ -2,21 +2,33 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { ndryshoStatusin, pranoMeTakim } from "@/lib/lejet";
-import { njoftoKreatorinPranuar } from "@/lib/email";
+import { njoftoKreatorinPranuar, njoftoKreatorinRefuzuar } from "@/lib/email";
 import { linkuIKerkeses } from "@/lib/kerkesat";
 
 
 export async function ruajStatusin(formData: FormData) {
+  const statusi = String(formData.get("statusi") ?? "");
   let mesazh: string;
   try {
-    mesazh = await ndryshoStatusin(
-      String(formData.get("id") ?? ""),
-      String(formData.get("statusi") ?? ""),
-    );
+    const r = await ndryshoStatusin(String(formData.get("id") ?? ""), statusi);
+    mesazh = r.rezultati;
+    if (r.rezultati === "ruajtur") {
+      revalidatePath("/panel");
+      // Kur refuzohet, kreatori merr email (nëse dështon, statusi mbetet i ruajtur).
+      if (statusi === "refuzuar" && r.kerkesa) {
+        let uDergua = false;
+        try {
+          uDergua = await njoftoKreatorinRefuzuar({
+            ...r.kerkesa,
+            linku: r.kerkesa.kodi ? linkuIKerkeses(r.kerkesa.kodi) : undefined,
+          });
+        } catch (e) { console.error(e); }
+        mesazh = uDergua ? "refuzuar" : "refuzuar-pa-email";
+      }
+    }
   } catch {
     mesazh = "databaza";
   }
-  if (mesazh === "ruajtur") revalidatePath("/panel");
   // redirect qëndron jashtë try/catch: Next.js e përdor si kontroll rrjedhe.
   redirect("/panel?m=" + mesazh);
 }

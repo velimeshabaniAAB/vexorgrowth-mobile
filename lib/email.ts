@@ -2,6 +2,7 @@ import "server-only";
 import nodemailer from "nodemailer";
 import { Resend } from "resend";
 import { emailVexor, butoni, tabela, ruaj, adresaBaze } from "./emailHtml";
+import type { Lloji } from "./kerkesat";
 
 type Emaili = {
   to: string;
@@ -56,14 +57,18 @@ export async function njoftoMeEmail(k: {
   emaili: string;
   linku: string | null;
   mesazhi: string | null;
+  lloji: Lloji;
 }) {
   const marresi = emailiIAdminit();
   if (!marresi) return false;
+  const konsulte = k.lloji === "konsulte";
+  const titulli = konsulte ? "Konsultë e re" : "Kërkesë e re";
   return dergo({
     to: marresi,
     replyTo: k.emaili,
-    subject: `Kërkesë e re: ${k.sherbimi} nga ${k.emri} · ${new Date().toLocaleString("sq-AL", { timeZone: "Europe/Belgrade" })}`,
+    subject: `${titulli}: ${k.sherbimi} nga ${k.emri} · ${new Date().toLocaleString("sq-AL", { timeZone: "Europe/Belgrade" })}`,
     text: [
+      `Lloji: ${konsulte ? "Bisedë konsultuese (nuk është ende e sigurt çfarë i duhet)" : "Kërkesë për shërbimin"}`,
       `Shërbimi: ${k.sherbimi}`,
       `Emri: ${k.emri}`,
       `Emaili: ${k.emaili}`,
@@ -73,9 +78,9 @@ export async function njoftoMeEmail(k: {
       "Hape te paneli për ta pranuar ose refuzuar.",
       "Kliko Reply për t'i shkruar direkt kreatorit.",
     ].join("\n"),
-    html: emailVexor(`Kërkesë e re: ${k.sherbimi}`,
-      `<p style="margin:0"><b>${ruaj(k.emri)}</b> dërgoi një kërkesë.</p>` +
-      tabela([["Email", k.emaili], ["Profili", k.linku ?? "-"], ["Mesazhi", k.mesazhi ?? "-"]]) +
+    html: emailVexor(`${titulli}: ${k.sherbimi}`,
+      `<p style="margin:0"><b>${ruaj(k.emri)}</b> ${konsulte ? "kërkoi një bisedë konsultuese." : "dërgoi një kërkesë."}</p>` +
+      tabela([["Lloji", konsulte ? "Konsultë" : "Shërbim"], ["Email", k.emaili], ["Profili", k.linku ?? "-"], ["Mesazhi", k.mesazhi ?? "-"]]) +
       butoni("Hape në panel", `${adresaBaze()}/panel`) +
       `<p style="font-size:13px;color:#71717a">Kliko Reply për t'i shkruar direkt kreatorit.</p>`),
   });
@@ -92,17 +97,21 @@ export function dataShqip(data: string) {
   return `${dita}, ${String(d).padStart(2, "0")}.${String(m).padStart(2, "0")}.${v}`;
 }
 
-// 1) Sapo kreatori dërgon kërkesën.
-export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; sherbimi: string; linku: string }) {
+// 1) Sapo kreatori dërgon kërkesën (statusi: Në pritje).
+export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; sherbimi: string; linku: string; lloji: Lloji }) {
+  const konsulte = k.lloji === "konsulte";
+  const cka = konsulte ? `bisedën konsultuese (${k.sherbimi})` : `"${k.sherbimi}"`;
   return dergo({
     to: k.emaili,
     replyTo: emailiIAdminit(),
-    subject: `E morëm kërkesën tënde: ${k.sherbimi}`,
+    subject: konsulte ? "E morëm kërkesën tënde për konsultë" : `E morëm kërkesën tënde: ${k.sherbimi}`,
     text: [
       `Përshëndetje ${k.emri},`,
       "",
-      `Kërkesa jote për "${k.sherbimi}" u ruajt. Statusi: Në pritje.`,
-      "Do të të kontaktojmë brenda 24 orësh.",
+      `Kërkesa jote për ${cka} u ruajt. Statusi: Në pritje.`,
+      konsulte
+        ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom, ku të ndihmojmë të zgjedhësh produktin."
+        : "Do të të kontaktojmë brenda 24 orësh.",
       "",
       "Ndiq kërkesën tënde këtu (linku është personal):",
       k.linku,
@@ -111,9 +120,13 @@ export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; 
       "",
       "Vexor Growth",
     ].join("\n"),
-    html: emailVexor("E morëm kërkesën tënde",
+    html: emailVexor(konsulte ? "E morëm kërkesën për konsultë" : "E morëm kërkesën tënde",
       `<p style="margin:0">Përshëndetje ${ruaj(k.emri)},</p>` +
-      `<p>Kërkesa jote për <b>${ruaj(k.sherbimi)}</b> u ruajt. Statusi: <b>Në pritje</b>. Do të të kontaktojmë brenda 24 orësh.</p>` +
+      `<p>Kërkesa jote për <b>${ruaj(konsulte ? "bisedë konsultuese" : k.sherbimi)}</b> u ruajt.</p>` +
+      tabela([["Statusi", "Në pritje"], ["Lloji", konsulte ? "Konsultë" : "Shërbim"], ["Shërbimi", k.sherbimi]]) +
+      `<p>${konsulte
+        ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom."
+        : "Do të të kontaktojmë brenda 24 orësh."}</p>` +
       butoni("Ndiq kërkesën", k.linku) +
       `<p style="font-size:13px;color:#71717a">Linku është personal. Nëse ky email doli te Spam, kliko "Not spam", që të mos e humbasësh ftesën për takim.</p>`),
   });
@@ -152,16 +165,18 @@ export function krijoIcs(t: { id: number; sherbim: string; data: string; ora: st
 // 2) Kur operatori e pranon: data, ora, linku i Zoom dhe takimi.ics.
 export async function njoftoKreatorinPranuar(t: {
   id: number; emri: string; emaili: string; sherbim: string; data: string; ora: string; zoom: string;
-  linku?: string;
+  linku?: string; lloji?: Lloji;
 }) {
+  const konsulte = t.lloji === "konsulte";
+  const cka = konsulte ? "bisedën konsultuese" : `"${t.sherbim}"`;
   return dergo({
     to: t.emaili,
     replyTo: emailiIAdminit(),
-    subject: `Takimi u caktua: ${t.sherbim} · ${dataShqip(t.data)}, ${t.ora}`,
+    subject: `${konsulte ? "Konsulta u caktua" : "Takimi u caktua"}: ${t.sherbim} · ${dataShqip(t.data)}, ${t.ora}`,
     text: [
       `Përshëndetje ${t.emri},`,
       "",
-      `Kërkesa jote për "${t.sherbim}" u pranua.`,
+      `Kërkesa jote për ${cka} u pranua.`,
       "",
       `Data: ${dataShqip(t.data)}`,
       `Ora: ${t.ora} (45 min)`,
@@ -172,9 +187,9 @@ export async function njoftoKreatorinPranuar(t: {
       "",
       "Vexor Growth",
     ].join("\n"),
-    html: emailVexor("Kërkesa u pranua",
+    html: emailVexor(konsulte ? "Konsulta u caktua" : "Kërkesa u pranua",
       `<p style="margin:0">Përshëndetje ${ruaj(t.emri)},</p>` +
-      `<p>Kërkesa jote për <b>${ruaj(t.sherbim)}</b> u pranua. Ja takimi ynë:</p>` +
+      `<p>Kërkesa jote për <b>${ruaj(konsulte ? "bisedë konsultuese" : t.sherbim)}</b> u pranua. Ja takimi ynë:</p>` +
       tabela([["Data", dataShqip(t.data)], ["Ora", `${t.ora} (45 min)`], ["Ku", "Zoom"]]) +
       butoni("Hyr në Zoom", t.zoom) +
       (t.linku ? butoni("Shto në kalendar", `${t.linku}/kalendari`, false) + butoni("Ndiq kërkesën", t.linku, false) : "") +
@@ -187,7 +202,36 @@ export async function njoftoKreatorinPranuar(t: {
   });
 }
 
-// 3) "E humbe emailin?": i dërgon kreatorit linqet e kërkesave të tij.
+// 3) Kur operatori e refuzon kërkesën.
+export async function njoftoKreatorinRefuzuar(k: { emri: string; emaili: string; sherbim: string; lloji: Lloji; linku?: string }) {
+  const konsulte = k.lloji === "konsulte";
+  const cka = konsulte ? "bisedën konsultuese" : `"${k.sherbim}"`;
+  const sherbimet = `${adresaBaze()}/sherbimet`;
+  return dergo({
+    to: k.emaili,
+    replyTo: emailiIAdminit(),
+    subject: `Përgjigje për kërkesën tënde: ${k.sherbim}`,
+    text: [
+      `Përshëndetje ${k.emri},`,
+      "",
+      `Faleminderit që na shkrove. Për momentin nuk mund ta pranojmë kërkesën për ${cka}.`,
+      "Mund të dërgosh një kërkesë të re më vonë, ose të na shkruash direkt duke iu përgjigjur këtij emaili.",
+      "",
+      `Shërbimet tona: ${sherbimet}`,
+      "",
+      "Vexor Growth",
+    ].join("\n"),
+    html: emailVexor("Përgjigje për kërkesën tënde",
+      `<p style="margin:0">Përshëndetje ${ruaj(k.emri)},</p>` +
+      `<p>Faleminderit që na shkrove. Për momentin nuk mund ta pranojmë kërkesën për <b>${ruaj(konsulte ? "bisedë konsultuese" : k.sherbim)}</b>.</p>` +
+      tabela([["Statusi", "Refuzuar"], ["Shërbimi", k.sherbim]]) +
+      `<p>Mund të dërgosh një kërkesë të re më vonë, ose të na shkruash direkt duke iu përgjigjur këtij emaili.</p>` +
+      butoni("Shiko shërbimet", sherbimet) +
+      (k.linku ? butoni("Ndiq kërkesën", k.linku, false) : "")),
+  });
+}
+
+// 4) "E humbe emailin?": i dërgon kreatorit linqet e kërkesave të tij.
 export async function dergoLinqetEKerkesave(emaili: string, lista: { sherbim: string; linku: string; statusi: string }[]) {
   const statusi: Record<string, string> = { ne_pritje: "Në pritje", pranuar: "Pranuar", refuzuar: "Refuzuar" };
   return dergo({

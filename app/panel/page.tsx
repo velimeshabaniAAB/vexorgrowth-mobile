@@ -15,6 +15,8 @@ const mesazhet: Record<string, string> = {
   databaza: "Nuk u lidhëm me databazën. Kontrollo Neon dhe provo përsëri.",
   pranuar: "Kërkesa u pranua dhe kreatorit iu dërgua ftesa me email.",
   "pranuar-pa-email": "Kërkesa u pranua, por emaili te kreatori nuk u dërgua. Kontrollo Gmail-in te .env.local.",
+  refuzuar: "Kërkesa u refuzua dhe kreatorit iu dërgua email.",
+  "refuzuar-pa-email": "Kërkesa u refuzua, por emaili te kreatori nuk u dërgua. Kontrollo Gmail-in te .env.local.",
   takimi: "Zgjidh datën dhe orën, dhe shkruaj një link Zoom që fillon me https:// (p.sh. https://zoom.us/j/...).",
 };
 
@@ -57,6 +59,7 @@ export default async function Panel({ searchParams }: {
     <article className="panel-karta">
       <div className="panel-karta-krye">
         <p className="eyebrow">#{k.id} · {k.sherbim}</p>
+        {k.lloji === "konsulte" && <span className="lloji-pill">Konsultë</span>}
         {k.statusi !== "ne_pritje" && (
           <span className={"statusi-pill statusi-pill-" + k.statusi}>{etiketat[k.statusi]}</span>
         )}
@@ -80,7 +83,9 @@ export default async function Panel({ searchParams }: {
           </div>
           <label>Linku i Zoom<input type="url" name="zoom" required defaultValue={zoomIm}
             placeholder="https://zoom.us/j/..." /></label>
-          <button className="action" type="submit">Prano dhe dërgo ftesën</button>
+          <button className="action" type="submit">
+            {k.lloji === "konsulte" ? "Cakto konsultën dhe dërgo ftesën" : "Prano dhe dërgo ftesën"}
+          </button>
         </form>
         <form action={ruajStatusin}>
           <input type="hidden" name="id" value={k.id} />
@@ -104,6 +109,7 @@ export default async function Panel({ searchParams }: {
 
     <div className="panel-numrat">
       <div><strong>{numri("ne_pritje")}</strong><span className="statusi-ne_pritje">Në pritje</span></div>
+      <div><strong>{kerkesat.filter((k) => k.lloji === "konsulte" && k.statusi === "ne_pritje").length}</strong><span>Konsulta</span></div>
       <div><strong>{numri("pranuar")}</strong><span className="statusi-pranuar">Pranuar</span></div>
       <div><strong>{numri("refuzuar")}</strong><span className="statusi-refuzuar">Refuzuar</span></div>
     </div>

@@ -499,3 +499,19 @@ body { padding-bottom: 92px; }
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
+/* ---- Lloji i kërkesës: shërbim ose konsultë ---- */
+.lloji-zgjedhje { border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.lloji-zgjedhje legend { padding: 0; margin-bottom: 10px; font-size: 14px; font-weight: 600; }
+.lloji-opsion {
+  display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 16px;
+  border: 1px solid var(--border); background: var(--surface); cursor: pointer;
+}
+.lloji-opsion:has(input:checked) { border-color: #D4D6DA; background: var(--surface-2); }
+.lloji-opsion input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: #D4D6DA; flex: none; }
+.lloji-opsion span { display: flex; flex-direction: column; gap: 3px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+.lloji-opsion strong { font-size: 15px; color: var(--text); }
+.lloji-pill {
+  padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  background: var(--silver); color: #0A0A0B;
+}
+.panel-numrat { grid-template-columns: repeat(4, minmax(0, 1fr)); }
