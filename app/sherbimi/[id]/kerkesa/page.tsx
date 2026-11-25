@@ -100,7 +100,7 @@ export default async function Kerkesa({
         <label className="field">
           <span>Emri dhe mbiemri</span>
           <input name="emri" type="text" required maxLength={120} autoComplete="name"
-            placeholder="p.sh. Arta Krasniqi" />
+            placeholder="Emri Mbiemri" />
         </label>
         <label className="field">
           <span>Email</span>
