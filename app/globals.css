@@ -184,15 +184,3 @@ main p strong { color: var(--text); font-weight: 600; }
 .statusi-ne_pritje { color: #8a6d00; }
 .statusi-pranuar { color: #1b7a3a; }
 .statusi-refuzuar { color: #b3261e; }
-
-/* Java 6: shiriti offline */
-.pwa-shirit {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 0.6rem 1rem;
-  font-size: 0.8rem;
-  color: #a8a8a8;
-  border-bottom: 1px solid #222;
-}
-.pwa-shirit a { color: #d0d0d0; font-weight: 600; }
-.pwa-shirit p { margin: 2px 0 0; }
