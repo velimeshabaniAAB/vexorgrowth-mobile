@@ -27,8 +27,12 @@ export function tabela(rreshtat: [string, string][]) {
 // Koka është foto (banner-i i zi me logon), prandaj duket njësoj në çdo Gmail.
 // Pjesa tjetër është e çelët: Gmail në iPhone me dark mode e kthen vetë në të errët,
 // ndërsa logoja (foto) nuk ndryshon. Fotoja merret nga APP_URL, pra duket kur aplikacioni është online.
+// Fotot e emailit merren gjithmonë nga adresa publike (Vercel), edhe kur provon nga localhost,
+// sepse Gmail-i nuk mund të shkarkojë foto nga kompjuteri yt.
+const ADRESA_FOTOVE = (process.env.EMAIL_FOTO_URL ?? "https://vexorgrowth-mobile.vercel.app").replace(/\/$/, "");
+
 export function emailVexor(titulli: string, permbajtja: string) {
-  const koka = `${adresaBaze()}/email-koka.jpg`;
+  const koka = `${ADRESA_FOTOVE}/email-koka.jpg`;
   return `<!doctype html><html lang="sq"><head><meta charset="utf-8"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"></head>
 <body style="margin:0;background:#f4f4f5;font-family:Montserrat,Arial,sans-serif;color:#18181b">
 <table role="presentation" style="width:100%;background:#f4f4f5;padding:24px 12px"><tr><td align="center">
