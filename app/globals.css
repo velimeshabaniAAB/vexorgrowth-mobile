@@ -196,37 +196,3 @@ main p strong { color: var(--text); font-weight: 600; }
 }
 .pwa-shirit a { color: #d0d0d0; font-weight: 600; }
 .pwa-shirit p { margin: 2px 0 0; }
-
-/* Java 8: vendi i takimit */
-.vendi-takimit {
-  margin-top: 1.5rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid #2a2a2a;
-  border-radius: 14px;
-  background: #101010;
-}
-.vendi-takimit h2 { margin: 0 0 0.25rem; font-size: 1.15rem; }
-.vendi-takimit label { display: block; margin-top: 0.75rem; font-size: 0.85rem; color: #bdbdbd; }
-.vendi-rreshti { display: flex; gap: 0.5rem; margin-top: 0.35rem; }
-.vendi-rreshti input {
-  flex: 1;
-  min-width: 0;
-  padding: 0.7rem 0.9rem;
-  border: 1px solid #3a3a3a;
-  border-radius: 10px;
-  background: #1a1a1a;
-  color: #f2f2f2;
-  font: inherit;
-}
-.vendi-rreshti button {
-  padding: 0.7rem 1rem;
-  border: 1px solid #555;
-  border-radius: 10px;
-  background: transparent;
-  color: #e0e0e0;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-[data-testid="meeting-error"] { color: #f07a72; min-height: 1.2em; margin: 0.3rem 0; }
-[data-testid="location-accuracy"] { color: #5fcf86; min-height: 1.2em; margin: 0.2rem 0; }

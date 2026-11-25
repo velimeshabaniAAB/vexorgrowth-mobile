@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { gjejSherbimin } from "@/lib/sherbimet";
 import { Ikona, IKONAT } from "@/components/Ikona";
-import VendiTakimit from "@/components/VendiTakimit";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +61,6 @@ export default async function Detajet({
       <Link className="action" href={`/sherbimi/${id}/kerkesa`}>
         Dërgo kërkesë
       </Link>
-      <VendiTakimit />
     </main>
   );
 }
