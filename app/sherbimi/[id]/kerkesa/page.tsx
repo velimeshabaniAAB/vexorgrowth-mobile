@@ -41,22 +41,30 @@ export default async function Kerkesa({
 
   // Pas dërgimit të suksesshëm
   if (derguar) {
+    const kaKod = !!kodi && /^[A-Za-z0-9_-]{8,40}$/.test(kodi);
     return (
-      <main>
-        <section className="center">
-          <div className="status-icon">
-            <Ikona d={IKONAT.check} size={34} sw={2.4} />
+      <main className="vx-faqe">
+        <section className="vx-konfirmimi">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-rreth.png" alt="Vexor Growth" width={170} height={170} />
+          <p className="vx-etiketa">Kërkesa u dërgua</p>
+          <h1 className="vx-h2">Faleminderit!</h1>
+          <p className="vx-lead">
+            Kërkesa për <strong>{konsulte ? "bisedë konsultuese" : sherbim.emri}</strong> u ruajt.{" "}
+            {konsulte
+              ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom."
+              : "Do të të kontaktojmë brenda 24 orësh në emailin që na dhe."}
+          </p>
+          <ol className="vx-hapat-mini" aria-label="Statusi">
+            <li className="bere"><i aria-hidden="true">✓</i>Dërguar</li>
+            <li className="tani"><i aria-hidden="true">2</i>Në pritje</li>
+            <li><i aria-hidden="true">3</i>Takim në Zoom</li>
+          </ol>
+          <p className="vx-shenim">Të dërguam edhe një email me linkun personal. Nëse nuk e sheh, kontrollo te Spam.</p>
+          <div className="vx-butonat">
+            {kaKod && <Link className="vx-btn" href={`/kerkesa/${kodi}`}>Ndiq kërkesën</Link>}
+            <Link className="vx-btn vx-btn-ghost" href="/sherbimet">Kthehu te shërbimet</Link>
           </div>
-          <h1>Kërkesa u dërgua</h1>
-          <p>Faleminderit! Kërkesa për <strong>{konsulte ? "bisedë konsultuese" : sherbim.emri}</strong> u ruajt.</p>
-          <p className="status-pill">Statusi: Në pritje</p>
-          <p>{konsulte
-            ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom."
-            : "Do të të kontaktojmë brenda 24 orësh në emailin që na dhe."}</p>
-          {kodi && /^[A-Za-z0-9_-]{8,40}$/.test(kodi) && (
-           <Link className="action" href={`/kerkesa/${kodi}`}>Ndiq kërkesën</Link>
-          )}
-          <Link className="action action-ghost" href="/">Kthehu te shërbimet</Link>
         </section>
       </main>
     );
