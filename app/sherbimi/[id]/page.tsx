@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { gjejSherbimin } from "@/lib/sherbimet";
 import { Ikona, IKONAT } from "@/components/Ikona";
 import VendiTakimit from "@/components/VendiTakimit";
-import RuajSherbimin from "@/components/RuajSherbimin";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +30,6 @@ export default async function Detajet({
       <span className="badge">{sherbim.kategoria}</span>
       <h1>{sherbim.emri}</h1>
       <p className="lead">{sherbim.pershkrimi}</p>
-      <RuajSherbimin sherbimId={sherbim.id} />
 
       <dl className="info-card">
         <div>
