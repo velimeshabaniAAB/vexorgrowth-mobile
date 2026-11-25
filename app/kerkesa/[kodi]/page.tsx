@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { gjejMeKod, type KerkesaIme } from "@/lib/kerkesat";
 import { dataShqip } from "@/lib/email";
+import RifreskoAutomatik from "@/components/RifreskoAutomatik";
 
 export const dynamic = "force-dynamic";
 // Faqja është personale: motorët e kërkimit nuk e ruajnë.
@@ -50,6 +51,7 @@ export default async function KerkesaImeFaqja({ params }: { params: Promise<{ ko
 
   return (
     <main className="vx-faqe vx-kerkesa">
+      <RifreskoAutomatik />
       <section className="vx-kerkesa-koka">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo-rreth.png" alt="Vexor Growth" width={120} height={120} />

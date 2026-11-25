@@ -57,13 +57,22 @@ export async function kerkesatEMia(p: Profil): Promise<KerkesaPanel[]> {
   return rows as KerkesaPanel[];
 }
 
+// Java 10: kërkesa pranohet ose refuzohet vetëm një herë. Nëse nuk është më "ne_pritje",
+// kthejmë "perpunuar" (p.sh. klikim i dyfishtë ose dy tab-e të hapura), pa dërguar email të dytë.
+async function ePerpunuar(id: number, operatorId: string) {
+  const sql = getSql();
+  const r = await sql`SELECT 1 FROM kerkesat_vexor k JOIN sherbimet s ON s.id = k.sherbim_id
+    WHERE k.id = ${id} AND s.operator_id = ${operatorId} AND k.statusi <> 'ne_pritje'`;
+  return r.length === 1;
+}
+
 // Kreatori që duhet njoftuar kur kërkesa refuzohet.
 export type KerkesaERefuzuar = {
   id: number; emri: string; emaili: string; kodi: string | null; lloji: Lloji; sherbim: string;
 };
 
 export async function ndryshoStatusin(id: string, statusi: string)
-  : Promise<{ rezultati: "hyr" | "ndaluar" | "fushe" | "ruajtur"; kerkesa?: KerkesaERefuzuar }> {
+  : Promise<{ rezultati: "hyr" | "ndaluar" | "fushe" | "ruajtur" | "perpunuar"; kerkesa?: KerkesaERefuzuar }> {
   const p = await profiliIm();
   if (!p) return { rezultati: "hyr" };
   if (p.roli !== "operator") return { rezultati: "ndaluar" };
@@ -73,15 +82,16 @@ export async function ndryshoStatusin(id: string, statusi: string)
   const rows = await sql`UPDATE kerkesat_vexor k SET statusi = ${statusi}
     FROM sherbimet s
     WHERE k.id = ${Number(id)} AND s.id = k.sherbim_id AND s.operator_id = ${p.id}
+      AND k.statusi = 'ne_pritje'
       AND EXISTS (SELECT 1 FROM profilet_vexor WHERE github_id = ${p.id} AND roli = 'operator')
     RETURNING k.id, k.emri, k.emaili, k.kodi, k.lloji, s.emri AS sherbim`;
-  if (rows.length !== 1) return { rezultati: "ndaluar" };
+  if (rows.length !== 1) return { rezultati: await ePerpunuar(Number(id), p.id) ? "perpunuar" : "ndaluar" };
   return { rezultati: "ruajtur", kerkesa: rows[0] as KerkesaERefuzuar };
 }
 
 // Pranon kërkesën dhe cakton takimin. Vetëm operatori që zotëron shërbimin.
 export async function pranoMeTakim(id: string, data: string, ora: string, zoom: string)
-  : Promise<{ rezultati: "hyr" | "ndaluar" | "takimi" | "pranuar"; takimi?: TakimiIPranuar }> {
+  : Promise<{ rezultati: "hyr" | "ndaluar" | "takimi" | "pranuar" | "perpunuar"; takimi?: TakimiIPranuar }> {
   const p = await profiliIm();
   if (!p) return { rezultati: "hyr" };
   if (p.roli !== "operator") return { rezultati: "ndaluar" };
@@ -94,9 +104,10 @@ export async function pranoMeTakim(id: string, data: string, ora: string, zoom: 
     SET statusi = 'pranuar', data_takimit = ${data}, ora_takimit = ${ora}, zoom_link = ${zoom}, pranuar_me = now()
     FROM sherbimet s
     WHERE k.id = ${Number(id)} AND s.id = k.sherbim_id AND s.operator_id = ${p.id}
+      AND k.statusi = 'ne_pritje'
       AND EXISTS (SELECT 1 FROM profilet_vexor WHERE github_id = ${p.id} AND roli = 'operator')
         RETURNING k.id, k.emri, k.emaili, k.kodi, k.lloji, s.emri AS sherbim`;
-  if (rows.length !== 1) return { rezultati: "ndaluar" };
+  if (rows.length !== 1) return { rezultati: await ePerpunuar(Number(id), p.id) ? "perpunuar" : "ndaluar" };
   const r = rows[0] as { id: number; emri: string; emaili: string; kodi: string | null; lloji: Lloji; sherbim: string };
   return { rezultati: "pranuar", takimi: { ...r, data, ora, zoom } };
 }

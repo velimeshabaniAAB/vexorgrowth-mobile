@@ -10,9 +10,9 @@ const rreshtat = [
   ["kurs", "Kurs me video", "Individuale", "Kurs i plotë në gjashtë faza. Merr skriptet gati: ti vetëm i lexon para kamerës.", ["Skript i plotë për çdo modul", "Gati për teleprompter", "Fletë pune për çdo modul"], "Kreatorë që flasin para kamerës."],
   ["mjete", "Paketë mjetesh digjitale", "Individuale", "Shabllone, checklista dhe SOP rreth një problemi specifik.", ["Shabllone të gatshme", "Checklista", "SOP: procedurë hap pas hapi"], "Audienca që duan veprim."],
   ["coaching", "Program coaching-u / mentorimi", "Individuale", "Punë direkte me klientët, me strukturë të plotë javë pas jave.", ["2–14 javë", "Fletë pune çdo javë", "Udhëzues për çdo seancë"], "Ofertë premium."],
-  ["starter", "Paketa Starter", "Paketë", "Produkti i parë, pa kamera.", ["eBook ose paketë mjetesh", "Faqe shitjeje", "Hostimi dhe pagesat"], "Kreatorë që nisin nga zero."],
-  ["launch", "Paketa Launch", "Paketë", "Kurs i plotë dhe lansim me listë email-esh.", ["Kurs me video, me skripte gati", "Faqe shitjeje dhe sekuencë email-esh", "Lansim pilot"], "Kreatorë gati për lansim."],
-  ["premium", "Paketa Premium", "Paketë", "Ofertë e nivelit të lartë, me punë direkte me klientët.", ["Program coaching-u", "Lansim me webinar", "Përmbajtje për rrjete sociale"], "Ofertë premium."],
+  ["starter", "Starter", "Paketë", "Produkti i parë, pa kamera.", ["eBook ose paketë mjetesh", "Faqe shitjeje", "Hostimi dhe pagesat"], "Kreatorë që nisin nga zero."],
+  ["launch", "Launch", "Paketë", "Kurs i plotë dhe lansim me listë email-esh.", ["Kurs me video, me skripte gati", "Faqe shitjeje dhe sekuencë email-esh", "Lansim pilot"], "Kreatorë gati për lansim."],
+  ["premium", "Premium", "Paketë", "Ofertë e nivelit të lartë, me punë direkte me klientët.", ["Program coaching-u", "Lansim me webinar", "Përmbajtje për rrjete sociale"], "Ofertë premium."],
 ];
 
 for (const [id, emri, kategoria, pershkrimi, perfshin, perKe] of rreshtat) {

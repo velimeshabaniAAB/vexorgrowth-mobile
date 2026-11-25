@@ -2,6 +2,7 @@ import Link from "next/link";
 import DetajetOferte from "@/components/DetajetOferte";
 import RuajSherbimin from "@/components/RuajSherbimin";
 import { OFERTA, MARKETINGU, type Oferta } from "@/lib/oferta";
+import { lexoSherbimet } from "@/lib/sherbimet";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +40,19 @@ export default async function Sherbimet({ searchParams }: {
   const { lloji } = await searchParams;
   const paketat = lloji === "paketat";
 
-  const lista = OFERTA.filter((o) => o.lloji === (paketat ? "paketa" : "individuale"));
+  // Java 4: lista lexohet nga Neon. Kartat dalin vetëm për shërbimet që ekzistojnë në databazë,
+  // dhe emri e përshkrimi merren nga databaza (ndryshimi në Neon shfaqet këtu).
+  let lista: Oferta[] = [];
+  let gabimDb = false;
+  try {
+    const nga_db = new Map((await lexoSherbimet()).map((s) => [s.id, s]));
+    lista = OFERTA
+      .filter((o) => o.lloji === (paketat ? "paketa" : "individuale") && nga_db.has(o.id))
+      .map((o) => ({ ...o, emri: nga_db.get(o.id)!.emri, pershkrimi: nga_db.get(o.id)!.pershkrimi }));
+  } catch (e) {
+    console.error("Gabimi i shërbimeve:", e);
+    gabimDb = true;
+  }
 
   return (
     <main className="vx-faqe">
@@ -55,9 +68,11 @@ export default async function Sherbimet({ searchParams }: {
         </nav>
       </section>
 
-      <div className={paketat ? "vx-rrjeta vx-rrjeta-3" : "vx-rrjeta vx-rrjeta-2"}>
-        {lista.map((o) => <KartaOferte key={o.id} o={o} />)}
-      </div>
+      {gabimDb ? <p role="alert" className="vx-kutia">Nuk u lidhëm me databazën. Provo përsëri pas pak.</p>
+        : lista.length === 0 ? <p className="vx-kutia">Nuk ka shërbime për momentin.</p>
+        : <div className={paketat ? "vx-rrjeta vx-rrjeta-3" : "vx-rrjeta vx-rrjeta-2"}>
+            {lista.map((o) => <KartaOferte key={o.id} o={o} />)}
+          </div>}
 
       <section className="vx-seksion vx-marketingu">
         <div>

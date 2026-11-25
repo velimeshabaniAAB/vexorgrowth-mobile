@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Hyrja from "@/components/Hyrja";
 import HyrjaEkipit from "@/components/HyrjaEkipit";
+import RifreskoAutomatik from "@/components/RifreskoAutomatik";
 import { profiliIm, kerkesatEMia, type KerkesaPanel, type Profil } from "@/lib/lejet";
 import { ruajStatusin, pranoKerkesen } from "./actions";
 import { dataShqip } from "@/lib/email";
@@ -16,6 +17,7 @@ const mesazhet: Record<string, string> = {
   pranuar: "Kërkesa u pranua dhe kreatorit iu dërgua ftesa me email.",
   "pranuar-pa-email": "Kërkesa u pranua, por emaili te kreatori nuk u dërgua. Kontrollo Gmail-in te .env.local.",
   refuzuar: "Kërkesa u refuzua dhe kreatorit iu dërgua email.",
+  perpunuar: "Kjo kërkesë ishte përpunuar tashmë. Nuk u dërgua email i dytë.",
   "refuzuar-pa-email": "Kërkesa u refuzua, por emaili te kreatori nuk u dërgua. Kontrollo Gmail-in te .env.local.",
   takimi: "Zgjidh datën dhe orën, dhe shkruaj një link Zoom që fillon me https:// (p.sh. https://zoom.us/j/...).",
 };
@@ -96,6 +98,7 @@ export default async function Panel({ searchParams }: {
   );
 
   return <main className="vx-faqe vx-panel">
+    <RifreskoAutomatik />
     <header className="panel-krye">
       <div>
         <p className="vx-etiketa">Hapësira e punës</p>
