@@ -753,11 +753,23 @@ body { padding-bottom: 92px; }
 
 /* ---------- Laptop ---------- */
 /* Menuja mbetet poshtë si në telefon (në qendër); faqet zgjerohen. */
+/* Shiriti që lëviz del deri në skaj, por pa krijuar scroll anash */
+html, body { overflow-x: clip; }
+
 @media (min-width: 900px) {
-  main { max-width: 760px; padding-top: 40px; }
-  main.vx-faqe { max-width: 1080px; padding: 32px 24px 64px; }
+  /* Në laptop menuja me ikona del lart (fikse), që të mos mbulojë përmbajtjen */
+  body { padding-bottom: 0; padding-top: 92px; }
+  .navigimi {
+    top: 14px; bottom: auto; height: 62px; width: 560px; padding-bottom: 0;
+    border: 1px solid #222226; border-radius: 999px;
+    background: rgba(11, 11, 13, 0.92); backdrop-filter: blur(12px);
+  }
+  .nav-lidhja { flex-direction: row; gap: 8px; min-width: 0; padding: 8px 14px; border-radius: 999px; font-size: 13px; }
+  .nav-lidhja.aktive { background: #1C1C1F; }
+  main { max-width: 760px; padding-top: 24px; }
+  main.vx-faqe { max-width: 1080px; padding: 16px 24px 64px; }
   .vx-koka-tel img { height: 42px; }
-  .vx-shirit { margin: 0 calc(50% - 50vw); }
+  .vx-shirit { margin: 0 calc(50% - 50vw); padding-left: 0; padding-right: 0; }
   .vx-seksion { margin-top: 64px; }
 }
 
