@@ -82,7 +82,7 @@ export async function njoftoMeEmail(k: {
       `<p style="margin:0"><b>${ruaj(k.emri)}</b> ${konsulte ? "kërkoi një bisedë konsultuese." : "dërgoi një kërkesë."}</p>` +
       tabela([["Lloji", konsulte ? "Konsultë" : "Shërbim"], ["Email", k.emaili], ["Profili", k.linku ?? "-"], ["Mesazhi", k.mesazhi ?? "-"]]) +
       butoni("Hape në panel", `${adresaBaze()}/panel`) +
-      `<p style="font-size:13px;color:#a1a1aa">Kliko Reply për t'i shkruar direkt kreatorit.</p>`),
+      `<p style="font-size:13px;color:#71717a">Kliko Reply për t'i shkruar direkt kreatorit.</p>`),
   });
 }
 
@@ -128,7 +128,7 @@ export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; 
         ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom."
         : "Do të të kontaktojmë brenda 24 orësh."}</p>` +
       butoni("Ndiq kërkesën", k.linku) +
-      `<p style="font-size:13px;color:#a1a1aa">Linku është personal. Nëse ky email doli te Spam, kliko "Not spam", që të mos e humbasësh ftesën për takim.</p>`),
+      `<p style="font-size:13px;color:#71717a">Linku është personal. Nëse ky email doli te Spam, kliko "Not spam", që të mos e humbasësh ftesën për takim.</p>`),
   });
 }
 
@@ -193,7 +193,7 @@ export async function njoftoKreatorinPranuar(t: {
       tabela([["Data", dataShqip(t.data)], ["Ora", `${t.ora} (45 min)`], ["Ku", "Zoom"]]) +
       butoni("Hyr në Zoom", t.zoom) +
       (t.linku ? butoni("Shto në kalendar", `${t.linku}/kalendari`, false) + butoni("Ndiq kërkesën", t.linku, false) : "") +
-      `<p style="font-size:13px;color:#a1a1aa">Takimin mund ta shtosh në kalendar edhe me skedarin takimi.ics bashkëngjitur.</p>`),
+      `<p style="font-size:13px;color:#71717a">Takimin mund ta shtosh në kalendar edhe me skedarin takimi.ics bashkëngjitur.</p>`),
     attachments: [{
       filename: "takimi.ics",
       content: Buffer.from(krijoIcs(t), "utf-8"),
@@ -253,6 +253,6 @@ export async function dergoLinqetEKerkesave(emaili: string, lista: { sherbim: st
       `<p style="margin:0">Këto janë linqet personale të kërkesave të tua:</p>` +
       lista.map((k) => `<p style="margin:14px 0 4px"><b>${ruaj(k.sherbim)}</b> · ${ruaj(statusi[k.statusi] ?? k.statusi)}</p>` +
         butoni("Hape kërkesën", k.linku, false)).join("") +
-      `<p style="font-size:13px;color:#a1a1aa">Nëse nuk e kërkove ti këtë email, mund ta injorosh.</p>`),
+      `<p style="font-size:13px;color:#71717a">Nëse nuk e kërkove ti këtë email, mund ta injorosh.</p>`),
   });
 }
