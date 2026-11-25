@@ -1,7 +1,17 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
+
+function degjo(ndrysho: () => void) {
+  window.addEventListener("online", ndrysho);
+  window.addEventListener("offline", ndrysho);
+  return () => {
+    window.removeEventListener("online", ndrysho);
+    window.removeEventListener("offline", ndrysho);
+  };
+}
 
 export default function Pwa() {
+  const online = useSyncExternalStore(degjo, () => navigator.onLine, () => true);
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
     let cancelled = false;
@@ -18,8 +28,11 @@ export default function Pwa() {
       navigator.serviceWorker.removeEventListener("controllerchange", warmSnapshot);
     };
   }, []);
-  return <aside className="pwa-shirit">
-    <a href="/offline.html">Lista për lexim pa internet</a>
-    <p>Kopja e ruajtur mund të jetë e vjetër. Kërkesat dërgohen vetëm me internet.</p>
+  // Shiriti del vetëm kur s'ka internet.
+  if (online) return null;
+  return <aside className="pwa-shirit" role="status">
+    <span className="pwa-pika" aria-hidden="true" />
+    <p><strong>Je pa internet.</strong> Kopja e ruajtur mund të jetë e vjetër. Kërkesat dërgohen vetëm me internet.</p>
+    <a href="/offline.html">Shiko listën e ruajtur</a>
   </aside>;
 }

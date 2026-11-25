@@ -185,17 +185,14 @@ main p strong { color: var(--text); font-weight: 600; }
 .statusi-pranuar { color: #1b7a3a; }
 .statusi-refuzuar { color: #b3261e; }
 
-/* Java 6: shiriti offline */
+/* Java 6: shiriti offline (del vetëm pa internet) */
 .pwa-shirit {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 0.6rem 1rem;
-  font-size: 0.8rem;
-  color: #a8a8a8;
-  border-bottom: 1px solid #222;
+  position: sticky; top: 0; z-index: 60; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+  padding: 12px 18px; background: #1f1a10; border-bottom: 1px solid #5a4a2a; color: #f5dc9c; font-size: 14px;
 }
-.pwa-shirit a { color: #d0d0d0; font-weight: 600; }
-.pwa-shirit p { margin: 2px 0 0; }
+.pwa-shirit p { margin: 0; flex: 1 1 260px; color: #f5dc9c; }
+.pwa-shirit a { color: #fff3d0; font-weight: 700; text-decoration: underline; }
+.pwa-pika { width: 8px; height: 8px; border-radius: 4px; background: #f0c96a; animation: vx-pulso 1.2s ease-in-out infinite; }
 
 /* Java 8: vendi i takimit */
 .vendi-takimit {

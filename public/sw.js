@@ -1,7 +1,7 @@
 // Kjo cache përmban VETËM dokumentin offline, ikonat dhe listën publike të shërbimeve.
-const CACHE = "vexor-public-v1";
+const CACHE = "vexor-public-v2";
 const API = "/api/sherbimet";
-const SHELL = ["/offline.html", "/icons/icon-192.png", "/icons/icon-512.png"];
+const SHELL = ["/offline.html", "/logo-rreth.png", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL))
@@ -46,7 +46,12 @@ self.addEventListener("fetch", event => {
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
   if (url.pathname === API && !url.search) {
     event.respondWith(readPublicList(request));
-  } else if (request.mode === "navigate" && ["/", "/offline.html"].includes(url.pathname)) {
+  } else if (url.pathname === "/logo-rreth.png") {
+    // Logoja për faqen offline: nga cache-i kur s'ka internet.
+    event.respondWith(fetch(request).catch(async () =>
+      (await (await caches.open(CACHE)).match("/logo-rreth.png")) || Response.error()));
+  } else if (request.mode === "navigate") {
+    // Çdo faqe që nuk hapet pa internet tregon faqen offline (jo të dhëna private të ruajtura).
         event.respondWith(fetch(request).catch(async () => {
       const saved = await (await caches.open(CACHE)).match("/offline.html");
       return saved || new Response("Hape Vexor Growth një herë me internet.", {
@@ -54,5 +59,5 @@ self.addEventListener("fetch", event => {
       });
     }));
   }
-  // /panel, /api/auth, /sherbimi/.../kerkesa, POST dhe faqet private nuk ruhen.
+  // Përmbajtja e /panel, /api/auth, kërkesave dhe POST-eve nuk ruhet kurrë në cache.
 });

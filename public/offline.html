@@ -1,66 +1,106 @@
 <!doctype html>
 <html lang="sq"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vexor Growth · Lista e ruajtur</title>
+<meta name="theme-color" content="#050506">
+<title>Vexor Growth · Pa internet</title>
 <style>
-body{margin:0;background:#0a0a0a;color:#f2f2f2;font:17px/1.6 system-ui,sans-serif}
-main{max-width:720px;margin:auto;padding:24px}
-.brand b{letter-spacing:6px;font-size:20px}.brand span{display:block;font-size:11px;letter-spacing:5px;color:#9a9a9a}
-.eyebrow{font-size:12px;letter-spacing:3px;color:#a8a8a8;text-transform:uppercase;margin-top:24px}
-h1{font-size:clamp(26px,7vw,38px);margin:4px 0 16px}
-button,a{font:inherit;color:inherit}
-button{padding:12px 18px;border:none;border-radius:12px;background:#dcdcdc;color:#111;font-weight:600;cursor:pointer}
-button:disabled{background:#2a2a2a;color:#8a8a8a;cursor:not-allowed}
-a{color:#d0d0d0}
-.karta{padding:16px 18px;margin:14px 0;border:1px solid #333;border-radius:14px;background:#141414}
-.karta h2{font-size:19px;margin:6px 0 4px}
-.kategoria{font-size:12px;padding:3px 10px;border-radius:12px;background:#2a2a2a;color:#d0d0d0}
-.karta p{margin:4px 0;color:#bdbdbd}
-#source{padding:14px 16px;border-left:4px solid #c0c0c0;background:#1a1a1a}
-time{overflow-wrap:anywhere}
-*:focus-visible{outline:3px solid #c0c0c0;outline-offset:4px}
+*{box-sizing:border-box}
+body{margin:0;background:#050506;color:#f2f2f2;font:16px/1.6 Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:auto;padding:28px 20px 48px}
+.koka{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:8px 0 22px}
+.koka img{width:150px;height:auto}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;border:1px solid #5a4a2a;background:#1f1a10;color:#f5dc9c;font-size:13px;font-weight:600}
+.pill i{width:8px;height:8px;border-radius:4px;background:#f0c96a;animation:pulso 1.2s ease-in-out infinite}
+.pill.online{border-color:#2f5a3e;background:#10241a;color:#a8e6bd}.pill.online i{background:#5fcf86;animation:none}
+@keyframes pulso{50%{opacity:.3}}
+h1{margin:6px 0 0;font-size:clamp(28px,7vw,40px);line-height:1.1;letter-spacing:-.02em}
+.nen{margin:0;color:#a3a3a8;max-width:520px}
+.kutia{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:22px 0;padding:16px 18px;border-radius:18px;background:#121214;border:1px solid #26262a}
+.kutia p{margin:0;font-size:14px;color:#c4c4c8}.kutia small{display:block;color:#8e8e93;font-size:12px}
+button{font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:999px;min-height:46px;padding:0 20px;background:linear-gradient(135deg,#f4f4f5 0%,#d4d4d8 52%,#a9a9b0 100%);color:#0a0a0b}
+button:disabled{background:#1c1c1f;color:#6b6b70;cursor:not-allowed}
+.etiketa{display:flex;align-items:center;gap:10px;margin:28px 0 12px;font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:#a3a3a8}
+.etiketa::before{content:"";width:24px;height:1px;background:#5a5a60}
+.rrjeta{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.karta{padding:20px;border-radius:22px;background:#121214;border:1px solid #26262a;display:flex;flex-direction:column;gap:6px}
+.karta h2{margin:0;font-size:19px}.karta p{margin:0;font-size:14px;color:#a3a3a8}
+.karta .info{font-size:12px;color:#8e8e93}
+.fund{margin-top:28px;padding:18px;border-radius:18px;border:1px dashed #3a3a3f;display:flex;flex-direction:column;gap:12px}
+.fund p{margin:0;font-size:13px;color:#a3a3a8}
+a{color:#e4e4e7;font-weight:600}
+*:focus-visible{outline:3px solid #d4d4d8;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.pill i{animation:none}}
 </style></head><body><main>
-<div class="brand"><b>VEXOR</b><span>GROWTH</span></div>
-<p class="eyebrow">Lexim publik</p><h1>Shërbimet, edhe pa internet</h1>
-<p id="source" role="status" aria-live="polite">Po lexojmë listën…</p>
-<p>Ruajtur për herë të fundit: <time id="saved">—</time></p>
-<button id="refresh" type="button">Rifresko listën</button>
-<div id="lista"></div>
-<button id="kerkesa" disabled>Dërgo kërkesë · kërkon lidhje dhe server</button>
-<p>Kjo pamje shërben vetëm për lexim. Afatet dhe shërbimet mund të kenë ndryshuar; asnjë kërkesë nuk dërgohet nga këtu.</p>
-<a href="/">Kthehu te aplikacioni</a>
+<header class="koka">
+  <img src="/logo-rreth.png" alt="Vexor Growth" width="150" height="150">
+  <span class="pill" id="gjendja"><i aria-hidden="true"></i><span>Je pa internet</span></span>
+  <h1>Shërbimet, edhe pa internet</h1>
+  <p class="nen">Po të tregojmë kopjen e fundit të ruajtur në telefon. Kur të kthehet lidhja, mund të dërgosh kërkesë.</p>
+</header>
+
+<div class="kutia">
+  <p id="source" role="status" aria-live="polite">Po lexojmë listën…<small>Ruajtur: <time id="saved">—</time></small></p>
+  <button id="refresh" type="button">Rifresko listën</button>
+</div>
+
+<div id="seksionet"></div>
+
+<div class="fund">
+  <button id="kerkesa" type="button" disabled>Dërgo kërkesë · kërkon internet</button>
+  <p>Kjo pamje është vetëm për lexim. Shërbimet mund të kenë ndryshuar dhe asnjë kërkesë nuk dërgohet nga këtu.</p>
+  <a href="/">Kthehu te aplikacioni</a>
+</div>
 </main><script>
-const source = document.querySelector("#source"), lista = document.querySelector("#lista");
-const refresh = document.querySelector("#refresh");
+const source = document.querySelector("#source"), seksionet = document.querySelector("#seksionet");
+const refresh = document.querySelector("#refresh"), gjendja = document.querySelector("#gjendja");
+const kerkesa = document.querySelector("#kerkesa");
+function shfaqGjendjen() {
+  const on = navigator.onLine;
+  gjendja.className = on ? "pill online" : "pill";
+  gjendja.lastElementChild.textContent = on ? "Interneti u kthye" : "Je pa internet";
+  kerkesa.disabled = !on;
+  kerkesa.textContent = on ? "Dërgo kërkesë" : "Dërgo kërkesë · kërkon internet";
+}
+kerkesa.addEventListener("click", () => { location.href = "/sherbimet"; });
+function mesazh(teksti) {
+  source.firstChild.textContent = teksti;
+}
+function seksion(titulli, lista) {
+  if (!lista.length) return;
+  const h = document.createElement("p"); h.className = "etiketa"; h.textContent = titulli;
+  const rrjeta = document.createElement("div"); rrjeta.className = "rrjeta";
+  for (const s of lista) {
+    const karta = document.createElement("article"); karta.className = "karta";
+    const emri = document.createElement("h2"); emri.textContent = s.emri;
+    const p = document.createElement("p"); p.textContent = s.pershkrimi;
+    const info = document.createElement("span"); info.className = "info"; info.textContent = s.menyra;
+    karta.append(emri, p, info); rrjeta.append(karta);
+  }
+  seksionet.append(h, rrjeta);
+}
 async function load() {
   refresh.disabled = true;
-  source.textContent = "Po kërkojmë listën…";
+  mesazh("Po kërkojmë listën…");
   try {
     const response = await fetch("/api/sherbimet", { cache: "no-store" });
     const data = await response.json();
     if (!response.ok || !Array.isArray(data.sherbimet)) throw new Error("no_snapshot");
-    lista.replaceChildren();
-    for (const s of data.sherbimet) {
-      const karta = document.createElement("article"); karta.className = "karta";
-      const kat = document.createElement("span"); kat.className = "kategoria"; kat.textContent = s.kategoria;
-      const titulli = document.createElement("h2"); titulli.textContent = s.emri;
-      const pershkrimi = document.createElement("p"); pershkrimi.textContent = s.pershkrimi;
-      const detajet = document.createElement("p");
-      detajet.textContent = "Afati: " + s.afati + " · " + s.menyra;
-      karta.append(kat, titulli, pershkrimi, detajet); lista.append(karta);
-    }
+    seksionet.replaceChildren();
+    seksion("Produkte individuale", data.sherbimet.filter(s => s.kategoria === "Individuale"));
+    seksion("Paketat", data.sherbimet.filter(s => s.kategoria === "Paketë"));
     const saved = response.headers.get("x-vexor-saved-at");
-    document.querySelector("#saved").textContent = saved ? new Date(saved).toLocaleString("sq-AL") : "Lexuar drejtpërdrejt; kopja ende nuk u ruajt.";
-    source.textContent = response.headers.get("x-vexor-source") === "cache"
-      ? "Lista e fundit e ruajtur · Mund të jetë vjetruar. Serveri nuk u arrit."
-      : "Lista erdhi nga serveri. Lexo sërish para se të dërgosh kërkesë.";
+    document.querySelector("#saved").textContent = saved ? new Date(saved).toLocaleString("sq-AL") : "ende jo";
+    mesazh(response.headers.get("x-vexor-source") === "cache"
+      ? "Lista e fundit e ruajtur. Mund të jetë e vjetër, serveri nuk u arrit."
+      : "Lista erdhi nga serveri.");
   } catch {
-    source.textContent = lista.children.length
+    mesazh(seksionet.children.length
       ? "Lidhja dështoi. Lista në ekran është e mëparshme."
-      : "Ende nuk ka listë të ruajtur. Hape aplikacionin me internet dhe provo përsëri.";
+      : "Ende nuk ka listë të ruajtur. Hape aplikacionin një herë me internet.");
   } finally { refresh.disabled = false; }
 }
 refresh.addEventListener("click", load);
-window.addEventListener("offline", () => { source.textContent = "Lidhja duket e ndërprerë. Lista e shfaqur mund të jetë e vjetër."; });
-window.addEventListener("online", () => { source.textContent = "Rrjeti duket i lidhur. Shtyp Rifresko listën për ta pyetur serverin."; });
+window.addEventListener("offline", () => { shfaqGjendjen(); mesazh("Lidhja u ndërpre. Lista mund të jetë e vjetër."); });
+window.addEventListener("online", () => { shfaqGjendjen(); load(); });
+shfaqGjendjen();
 load();
 </script></body></html>
