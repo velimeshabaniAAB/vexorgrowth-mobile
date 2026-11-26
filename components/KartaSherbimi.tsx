@@ -23,13 +23,13 @@ export function KartaSherbimi({ sherbim }: { sherbim: Sherbim }) {
         </div>
         <RuajSherbimin sherbimId={sherbim.id} kompakt />
       </div>
-      <p>Afati: {sherbim.afati} · {sherbim.menyra}</p>
+      <p>Timeline: {sherbim.afati} · {sherbim.menyra}</p>
       <div className="card-actions">
         <Link className="action" href={`/sherbimi/${sherbim.id}/kerkesa`}>
-          Dërgo kërkesë
+          Send a request
         </Link>
         <Link className="action action-ghost" href={`/sherbimi/${sherbim.id}`}>
-          Detajet
+          Details
         </Link>
       </div>
     </article>

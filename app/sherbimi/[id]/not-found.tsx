@@ -5,9 +5,9 @@ export default function SherbimiNukUGjet() {
     <main>
       <section className="center">
         <p className="big-404">404</p>
-        <h1>Shërbimi nuk u gjet</h1>
-        <p>Kjo adresë nuk përputhet me një shërbim në listë.</p>
-        <Link className="action" href="/">Kthehu te shërbimet</Link>
+        <h1>Service not found</h1>
+        <p>This address doesn’t match any service in the list.</p>
+        <Link className="action" href="/">Back to services</Link>
       </section>
     </main>
   );

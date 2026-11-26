@@ -10,6 +10,6 @@ export async function GET() {
       ({ id, emri, kategoria, afati, menyra, pershkrimi }));
     return Response.json({ sherbimet }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    return Response.json({ error: "Lista nuk mund të lexohet tani." }, { status: 503 });
+    return Response.json({ error: "The list cannot be read right now." }, { status: 503 });
   }
 }

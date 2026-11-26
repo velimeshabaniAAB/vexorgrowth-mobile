@@ -33,7 +33,7 @@ const ADRESA_FOTOVE = (process.env.EMAIL_FOTO_URL ?? "https://vexorgrowth-mobile
 
 export function emailVexor(titulli: string, permbajtja: string) {
   const koka = `${ADRESA_FOTOVE}/email-koka.jpg`;
-  return `<!doctype html><html lang="sq"><head><meta charset="utf-8"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"></head>
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"></head>
 <body style="margin:0;background:#f4f4f5;font-family:Montserrat,Arial,sans-serif;color:#18181b">
 <table role="presentation" style="width:100%;background:#f4f4f5;padding:24px 12px"><tr><td align="center">
 <table role="presentation" style="width:100%;max-width:540px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e4e4e7">
@@ -44,6 +44,6 @@ export function emailVexor(titulli: string, permbajtja: string) {
 <h1 style="margin:0 0 14px;font-size:22px;line-height:1.25;color:#0a0a0a">${ruaj(titulli)}</h1>
 ${permbajtja}
 </td></tr>
-<tr><td style="padding:16px 28px;border-top:1px solid #e4e4e7;font-size:12px;color:#71717a">Vexor Growth · Shadow operating për kreatorë<br>vexorgrowth@gmail.com · @vexorgrowth</td></tr>
+<tr><td style="padding:16px 28px;border-top:1px solid #e4e4e7;font-size:12px;color:#71717a">Vexor Growth · Shadow operating for creators<br>vexorgrowth@gmail.com · @vexorgrowth</td></tr>
 </table></td></tr></table></body></html>`;
 }

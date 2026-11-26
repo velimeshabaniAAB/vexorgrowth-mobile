@@ -44,8 +44,8 @@ export async function gjejMeKod(kodi: string): Promise<KerkesaIme | undefined> {
   const sql = getSql();
   const rows = await sql`
     SELECT k.id, s.emri AS sherbim, k.emri, k.statusi, k.lloji,
-      to_char(k.krijuar AT TIME ZONE 'Europe/Belgrade', 'DD.MM.YYYY, HH24:MI') AS derguar,
-      to_char(k.pranuar_me AT TIME ZONE 'Europe/Belgrade', 'DD.MM.YYYY, HH24:MI') AS pranuar,
+      to_char(k.krijuar AT TIME ZONE 'Europe/Belgrade', 'DD Mon YYYY, HH24:MI') AS derguar,
+      to_char(k.pranuar_me AT TIME ZONE 'Europe/Belgrade', 'DD Mon YYYY, HH24:MI') AS pranuar,
       to_char(k.data_takimit, 'YYYY-MM-DD') AS data_takimit, k.ora_takimit, k.zoom_link
     FROM kerkesat_vexor k JOIN sherbimet s ON s.id = k.sherbim_id
     WHERE k.kodi = ${kodi}`;

@@ -34,7 +34,7 @@ export default function RifreskoAutomatik({ sekonda = 5 }: { sekonda?: number })
   if (online) return null;
   return (
     <p role="status" className="vx-rilidhje">
-      <span aria-hidden="true" />Po rilidhemi… Po shfaqen vlerat e fundit të ruajtura.
+      <span aria-hidden="true" />Reconnecting… Showing the last saved values.
     </p>
   );
 }

@@ -32,7 +32,7 @@ export default function Pwa() {
   if (online) return null;
   return <aside className="pwa-shirit" role="status">
     <span className="pwa-pika" aria-hidden="true" />
-    <p><strong>Je pa internet.</strong> Kopja e ruajtur mund të jetë e vjetër. Kërkesat dërgohen vetëm me internet.</p>
-    <a href="/offline.html">Shiko listën e ruajtur</a>
+    <p><strong>You’re offline.</strong> The saved copy may be out of date. Requests can only be sent online.</p>
+    <a href="/offline.html">View the saved list</a>
   </aside>;
 }

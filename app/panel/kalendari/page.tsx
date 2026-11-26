@@ -9,13 +9,13 @@ import { shtoDetyren, kryejDetyren } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const DITET_SHKURT = ["Hën", "Mar", "Mër", "Enj", "Pre", "Sht", "Die"];
-const MUAJT = ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor",
-  "Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor"];
+const DITET_SHKURT = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const MUAJT = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
 
 const mesazhet: Record<string, string> = {
-  titulli: "Shkruaj titullin e detyrës.",
-  databaza: "Nuk u lidhëm me databazën. Provo përsëri.",
+  titulli: "Enter a task title.",
+  databaza: "We couldn't reach the database. Please try again.",
 };
 
 export default async function Kalendari({ searchParams }: {
@@ -37,7 +37,7 @@ export default async function Kalendari({ searchParams }: {
     }
   } catch (e) {
     console.error("Gabimi i kalendarit:", e);
-    return <main><h1>Kalendari</h1><p role="alert">{mesazhet.databaza}</p></main>;
+    return <main><h1>Calendar</h1><p role="alert">{mesazhet.databaza}</p></main>;
   }
   if (!p) return <HyrjaEkipit />;
   if (p.roli !== "operator") return <HyrjaEkipit pa_qasje />;
@@ -47,15 +47,15 @@ export default async function Kalendari({ searchParams }: {
   const kaTakim = new Set(takimetEJaves.map((t) => t.data));
 
   return <main className="vx-faqe vx-panel">
-    <p className="vx-etiketa">Operatori</p>
-    <h1 className="vx-h1">Kalendari</h1>
+    <p className="vx-etiketa">Operator</p>
+    <h1 className="vx-h1">Calendar</h1>
     <div className="kal-muaji">
-      <Link href={`/panel/kalendari?dita=${shtoDite(hena, -7)}`} aria-label="Java e kaluar">←</Link>
+      <Link href={`/panel/kalendari?dita=${shtoDite(hena, -7)}`} aria-label="Previous week">←</Link>
       <span>{MUAJT[mu - 1]} {v}</span>
-      <Link href={`/panel/kalendari?dita=${shtoDite(hena, 7)}`} aria-label="Java tjetër">→</Link>
+      <Link href={`/panel/kalendari?dita=${shtoDite(hena, 7)}`} aria-label="Next week">→</Link>
     </div>
 
-    <nav className="kal-java" aria-label="Ditët e javës">
+    <nav className="kal-java" aria-label="Days of the week">
       {java.map((d, i) => (
         <Link key={d} href={`/panel/kalendari?dita=${d}`}
           className={"kal-dita" + (d === dita ? " zgjedhur" : "") + (d === sot ? " sot" : "")}
@@ -70,14 +70,14 @@ export default async function Kalendari({ searchParams }: {
     <div className="vx-kal-kolonat">
     <section>
     <p className="vx-etiketa panel-titull">Takimet · {dataShqip(dita)}</p>
-    {takimetESotme.length === 0 ? <p className="panel-bosh">Nuk ka takime këtë ditë.</p> :
+    {takimetESotme.length === 0 ? <p className="panel-bosh">No meetings on this day.</p> :
       takimetESotme.map((t) => (
         <article key={t.id} className="kal-takim">
           <div className="kal-ora"><strong>{t.ora}</strong><span>45 min</span></div>
           <div>
             <strong>{t.emri}</strong>
             <span>{t.sherbim}</span>
-            {t.zoom_link && <a href={t.zoom_link} target="_blank" rel="noopener noreferrer">Hap Zoom</a>}
+            {t.zoom_link && <a href={t.zoom_link} target="_blank" rel="noopener noreferrer">Open Zoom</a>}
           </div>
         </article>
       ))}
@@ -85,10 +85,10 @@ export default async function Kalendari({ searchParams }: {
     </section>
 
     <section className="vx-kal-detyrat">
-    <p className="vx-etiketa panel-titull">Detyrat</p>
+    <p className="vx-etiketa panel-titull">Tasks</p>
     {m && mesazhet[m] && <p role="status" className="panel-mesazh" data-m="fushe">{mesazhet[m]}</p>}
     <ul className="kal-detyrat">
-      {lista.length === 0 && <li className="panel-bosh">Nuk ke detyra. Shto të parën më poshtë.</li>}
+      {lista.length === 0 && <li className="panel-bosh">No tasks yet. Add your first one below.</li>}
       {lista.map((d) => (
         <li key={d.id} className={d.kryer ? "kryer" : ""}>
           <form action={kryejDetyren}>
@@ -96,7 +96,7 @@ export default async function Kalendari({ searchParams }: {
             <input type="hidden" name="dita" value={dita} />
             <input type="hidden" name="kryer" value={d.kryer ? "0" : "1"} />
             <button type="submit" className="kal-kutia" aria-pressed={d.kryer}
-              aria-label={d.kryer ? `Shëno si të pakryer: ${d.titulli}` : `Shëno si të kryer: ${d.titulli}`}>
+              aria-label={d.kryer ? `Mark as not done: ${d.titulli}` : `Mark as done: ${d.titulli}`}>
               {d.kryer ? "✓" : ""}
             </button>
           </form>
@@ -110,11 +110,11 @@ export default async function Kalendari({ searchParams }: {
 
     <form action={shtoDetyren} className="kal-shto">
       <input type="hidden" name="dita" value={dita} />
-      <label htmlFor="titulli">Detyrë e re</label>
-      <input id="titulli" name="titulli" required maxLength={200} placeholder="p.sh. Përgatit auditimin para takimit" />
-      <label htmlFor="afati">Afati (opsional)</label>
+      <label htmlFor="titulli">New task</label>
+      <input id="titulli" name="titulli" required maxLength={200} placeholder="e.g. Prepare the audit before the meeting" />
+      <label htmlFor="afati">Due date (optional)</label>
       <input id="afati" name="afati" type="date" />
-      <button className="action" type="submit">+ Shto detyrën</button>
+      <button className="action" type="submit">+ Add task</button>
     </form>
     </section>
     </div>

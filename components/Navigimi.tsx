@@ -15,17 +15,17 @@ const IK = {
 
 // Menuja e kreatorit (pjesa publike).
 const kreatori: Lidhja[] = [
-  { href: "/", emri: "Ballina", ikona: IK.ballina },
-  { href: "/sherbimet", emri: "Shërbimet", ikona: IK.sherbimet },
-  { href: "/kerkesat", emri: "Kërkesat", ikona: IK.kerkesat },
-  { href: "/rreth-nesh", emri: "Rreth nesh", ikona: IK.rreth },
+  { href: "/", emri: "Home", ikona: IK.ballina },
+  { href: "/sherbimet", emri: "Services", ikona: IK.sherbimet },
+  { href: "/kerkesat", emri: "Requests", ikona: IK.kerkesat },
+  { href: "/rreth-nesh", emri: "About", ikona: IK.rreth },
 ];
 
 // Menuja e operatorit (paneli).
 const operatori: Lidhja[] = [
-  { href: "/panel", emri: "Kërkesat", ikona: IK.kerkesat },
-  { href: "/panel/kalendari", emri: "Kalendari", ikona: IK.kalendari },
-  { href: "/", emri: "Aplikacioni", ikona: IK.ballina },
+  { href: "/panel", emri: "Requests", ikona: IK.kerkesat },
+  { href: "/panel/kalendari", emri: "Calendar", ikona: IK.kalendari },
+  { href: "/", emri: "App", ikona: IK.ballina },
 ];
 
 export default function Navigimi() {
@@ -39,7 +39,7 @@ export default function Navigimi() {
       : href === "/panel" ? rruga === "/panel"
       : rruga === href || rruga.startsWith(href + "/") || (href === "/kerkesat" && rruga.startsWith("/kerkesa/"));
   return (
-    <nav className="navigimi" aria-label="Menuja kryesore">
+    <nav className="navigimi" aria-label="Main menu">
       {lidhjet.map((l) => {
         const aktive = eshteAktive(l.href);
         return (

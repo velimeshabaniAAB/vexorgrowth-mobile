@@ -57,8 +57,8 @@ export default function RuajSherbimin({ sherbimId, kompakt = false }: { sherbimI
       setRuajtur(ok ? vleraERe : eMeparshmja);
       setGjendja(ok ? "sukses" : "gabim");
       setMesazhi(ok
-        ? (vleraERe ? "U ruajt në këtë pajisje." : "U hoq nga të preferuarat.")
-        : "Pajisja nuk lejon ruajtjen.");
+        ? (vleraERe ? "Saved on this device." : "Removed from favourites.")
+        : "This device does not allow saving.");
       nePune.current = false;
       return;
     }
@@ -66,32 +66,32 @@ export default function RuajSherbimin({ sherbimId, kompakt = false }: { sherbimI
     // Me llogari (Java 9): pamja ndryshon menjëherë, pastaj konfirmon serveri.
     setRuajtur(vleraERe);
     setGjendja("duke-ruajtur");
-    setMesazhi(vleraERe ? "Po ruhet…" : "Po hiqet…");
+    setMesazhi(vleraERe ? "Saving…" : "Removing…");
     try {
       const r = await ruajSherbimin(sherbimId, vleraERe);
       if (r.ok) {
         setRuajtur(r.ruajtur);
         setGjendja("sukses");
-        setMesazhi(r.ruajtur ? "U ruajt te të preferuarat." : "U hoq nga të preferuarat.");
+        setMesazhi(r.ruajtur ? "Saved to favourites." : "Removed from favourites.");
       } else {
         setRuajtur(eMeparshmja);
         setDeshira(vleraERe);
         setGjendja("gabim");
-        setMesazhi("Ruajtja dështoi. Asgjë nuk u ndryshua.");
+        setMesazhi("Saving failed. Nothing was changed.");
       }
     } catch {
       // Serveri nuk u arrit: rikthe gjendjen e mëparshme.
       setRuajtur(eMeparshmja);
       setDeshira(vleraERe);
       setGjendja("gabim");
-      setMesazhi("Ruajtja dështoi. Asgjë nuk u ndryshua.");
+      setMesazhi("Saving failed. Nothing was changed.");
     } finally {
       nePune.current = false;
     }
   }
 
   const zene = gjendja === "duke-lexuar" || gjendja === "duke-ruajtur";
-  const etiketa = ruajtur ? "E ruajtur te të preferuarat" : "Ruaj shërbimin te të preferuarat";
+  const etiketa = ruajtur ? "Saved to favourites" : "Save service to favourites";
 
   if (kompakt) {
     return (
@@ -112,7 +112,7 @@ export default function RuajSherbimin({ sherbimId, kompakt = false }: { sherbimI
         data-testid="favorite-toggle" aria-pressed={ruajtur}
         disabled={zene}
         onClick={() => ndrysho(!ruajtur)}>
-        {ruajtur ? "★ E ruajtur te të preferuarat" : "☆ Ruaj shërbimin te të preferuarat"}
+        {ruajtur ? "★ Saved to favourites" : "☆ Save service to favourites"}
       </button>
 
       <p role="status" aria-live="polite" data-testid="favorite-status" data-state={gjendja}>
@@ -121,7 +121,7 @@ export default function RuajSherbimin({ sherbimId, kompakt = false }: { sherbimI
 
       {gjendja === "gabim" && deshira !== null && (
         <button type="button" data-testid="favorite-retry" onClick={() => ndrysho(deshira)}>
-          Provo përsëri
+          Try again
         </button>
       )}
     </section>

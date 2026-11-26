@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Vexor Growth", short_name: "Vexor",
-    description: "Shërbimet e Vexor Growth; listë publike për lexim offline.",
+    description: "Vexor Growth services; public list for offline reading.",
     start_url: "/", scope: "/", display: "standalone",
     background_color: "#0a0a0a", theme_color: "#0a0a0a",
     icons: [

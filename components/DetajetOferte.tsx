@@ -9,18 +9,18 @@ export default function DetajetOferte({ o }: { o: Oferta }) {
   return (
     <>
       <button type="button" className="vx-btn vx-btn-ghost" onClick={() => dritarja.current?.showModal()}>
-        Detajet
+        Details
       </button>
       <dialog ref={dritarja} className="vx-dritare" aria-labelledby={`d-${o.id}`}
         onClick={(e) => { if (e.target === e.currentTarget) e.currentTarget.close(); }}>
         <div className="vx-dritare-brenda">
           <div className="vx-dritare-koka">
             <div>
-              <p className="vx-etiketa-vogel">Çka përfshin</p>
+              <p className="vx-etiketa-vogel">What’s included</p>
               <h2 id={`d-${o.id}`}>{o.emri}</h2>
               <p>{o.pershkrimi}</p>
             </div>
-            <button type="button" aria-label="Mbyll" className="vx-mbyll" onClick={() => dritarja.current?.close()}>
+            <button type="button" aria-label="Close" className="vx-mbyll" onClick={() => dritarja.current?.close()}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                 strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
             </button>
@@ -34,8 +34,8 @@ export default function DetajetOferte({ o }: { o: Oferta }) {
             ))}
           </div>
           <div className="vx-dritare-fund">
-            <span>Oferta dhe çmimi i punës sonë: pas takimit në Zoom.</span>
-            <Link className="vx-btn" href={`/sherbimi/${o.id}/kerkesa`}>Dërgo kërkesë</Link>
+            <span>Our offer and price: after a Zoom call.</span>
+            <Link className="vx-btn" href={`/sherbimi/${o.id}/kerkesa`}>Send a request</Link>
           </div>
         </div>
       </dialog>

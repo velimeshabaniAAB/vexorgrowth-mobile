@@ -13,7 +13,7 @@ const vexorFont = Montserrat({
 
 export const metadata: Metadata = {
   title: "Vexor Growth",
-  description: "Shadow operating për kreatorë.",
+  description: "Shadow operating for creators.",
 };
 
 export const viewport: Viewport = {
@@ -24,7 +24,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="sq" className={vexorFont.variable}>
+    <html lang="en" className={vexorFont.variable}>
       <body>
         <Pwa />
         {children}

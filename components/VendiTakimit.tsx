@@ -4,15 +4,15 @@ import { useState } from "react";
 type Gjendja = "idle" | "loading" | "success" | "denied" | "timeout" | "unavailable";
 
 const mesazhet: Record<Gjendja, string> = {
-  idle: "Vendndodhja përdoret vetëm nëse shtyp butonin.",
-  loading: "Po kërkojmë vendndodhjen…",
-  success: "Vendndodhja u gjet afërsisht. Konfirmo ose shkruaj një vend tjetër.",
-  denied: "Leja u refuzua. Shkruaj vendtakimin më poshtë.",
-  timeout: "Vendndodhja vonoi shumë. Shkruaj vendtakimin më poshtë.",
-  unavailable: "Kjo pajisje nuk e jep vendndodhjen. Shkruaj vendtakimin më poshtë.",
+  idle: "Your location is used only if you press the button.",
+  loading: "Finding your location…",
+  success: "Approximate location found. Confirm it or enter another place.",
+  denied: "Permission denied. Enter the meeting place below.",
+  timeout: "Location took too long. Enter the meeting place below.",
+  unavailable: "This device can't provide a location. Enter the meeting place below.",
 };
 
-export default function VendiTakimit({ fillimi = "Online në Zoom" }: { fillimi?: string }) {
+export default function VendiTakimit({ fillimi = "Online on Zoom" }: { fillimi?: string }) {
   const [teksti, setTeksti] = useState("");
   const [konfirmuar, setKonfirmuar] = useState(fillimi);
   const [gabimi, setGabimi] = useState("");
@@ -23,7 +23,7 @@ export default function VendiTakimit({ fillimi = "Online në Zoom" }: { fillimi?
   function konfirmo() {
     const vendi = teksti.trim();
     if (!vendi) {
-      setGabimi("Shkruaj një vendtakim para se ta konfirmosh.");
+      setGabimi("Enter a meeting place before confirming.");
       return;
     }
     setGabimi("");
@@ -43,7 +43,7 @@ export default function VendiTakimit({ fillimi = "Online në Zoom" }: { fillimi?
         // Koordinatat nuk shfaqen dhe nuk ruhen; tregojmë vetëm saktësinë.
         const metra = Math.round(pozita.coords.accuracy);
         setSaktesia(metra);
-        setTeksti(`Pranë vendndodhjes sime (±${metra} m)`);
+        setTeksti(`Near my location (±${metra} m)`);
         setGjendja("success");
       },
       (gabim) => {
@@ -56,30 +56,30 @@ export default function VendiTakimit({ fillimi = "Online në Zoom" }: { fillimi?
 
   return (
     <section className="vendi-takimit" aria-labelledby="vendi-titulli">
-      <h2 id="vendi-titulli">Vendi i takimit</h2>
-      <p>Takimi bëhet në Zoom. Nëse preferon takim fizik, zgjidh ku të takohemi.</p>
+      <h2 id="vendi-titulli">Meeting place</h2>
+      <p>The meeting takes place on Zoom. If you prefer to meet in person, choose where.</p>
 
       <button type="button" className="action" data-testid="locate-me"
         onClick={gjejVendndodhjen} disabled={gjendja === "loading"}>
-        Përdor vendndodhjen time
+        Use my location
       </button>
       <p role="status" aria-live="polite" data-testid="location-status" data-state={gjendja}>
         {mesazhet[gjendja]}
       </p>
       <p data-testid="location-accuracy">
-        {saktesia !== null ? `Saktësia: rreth ${saktesia} m` : ""}
+        {saktesia !== null ? `Accuracy: about ${saktesia} m` : ""}
       </p>
 
-      <label htmlFor="vendtakimi">Shkruaj vendtakimin</label>
+      <label htmlFor="vendtakimi">Enter the meeting place</label>
       <div className="vendi-rreshti">
         <input id="vendtakimi" data-testid="meeting-input" value={teksti}
           placeholder=""
           onChange={(e) => { setTeksti(e.target.value); setGabimi(""); }} />
-        <button type="button" data-testid="confirm-meeting" onClick={konfirmo}>Konfirmo</button>
+        <button type="button" data-testid="confirm-meeting" onClick={konfirmo}>Confirm</button>
       </div>
       <p role="alert" data-testid="meeting-error">{gabimi}</p>
 
-      <p>Vendtakimi i konfirmuar: <strong data-testid="confirmed-meeting">{konfirmuar}</strong></p>
+      <p>Confirmed meeting place: <strong data-testid="confirmed-meeting">{konfirmuar}</strong></p>
     </section>
   );
 }

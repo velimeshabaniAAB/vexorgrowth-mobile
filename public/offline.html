@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="sq"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050506">
-<title>Vexor Growth · Pa internet</title>
+<title>Vexor Growth · Offline</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#050506;color:#f2f2f2;font:16px/1.6 Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -32,22 +32,22 @@ a{color:#e4e4e7;font-weight:600}
 </style></head><body><main>
 <header class="koka">
   <img src="/logo-rreth.png" alt="Vexor Growth" width="150" height="150">
-  <span class="pill" id="gjendja"><i aria-hidden="true"></i><span>Je pa internet</span></span>
-  <h1>Shërbimet, edhe pa internet</h1>
-  <p class="nen">Po të tregojmë kopjen e fundit të ruajtur në telefon. Kur të kthehet lidhja, mund të dërgosh kërkesë.</p>
+  <span class="pill" id="gjendja"><i aria-hidden="true"></i><span>You're offline</span></span>
+  <h1>Our services, even offline</h1>
+  <p class="nen">Showing the last copy saved on your phone. Once you're back online, you can send a request.</p>
 </header>
 
 <div class="kutia">
-  <p id="source" role="status" aria-live="polite">Po lexojmë listën…<small>Ruajtur: <time id="saved">—</time></small></p>
-  <button id="refresh" type="button">Rifresko listën</button>
+  <p id="source" role="status" aria-live="polite">Reading the list…<small>Saved: <time id="saved">—</time></small></p>
+  <button id="refresh" type="button">Refresh list</button>
 </div>
 
 <div id="seksionet"></div>
 
 <div class="fund">
-  <button id="kerkesa" type="button" disabled>Dërgo kërkesë · kërkon internet</button>
-  <p>Kjo pamje është vetëm për lexim. Shërbimet mund të kenë ndryshuar dhe asnjë kërkesë nuk dërgohet nga këtu.</p>
-  <a href="/">Kthehu te aplikacioni</a>
+  <button id="kerkesa" type="button" disabled>Send a request · needs internet</button>
+  <p>This view is read-only. Services may have changed, and no request is sent from here.</p>
+  <a href="/">Back to the app</a>
 </div>
 </main><script>
 const source = document.querySelector("#source"), seksionet = document.querySelector("#seksionet");
@@ -56,9 +56,9 @@ const kerkesa = document.querySelector("#kerkesa");
 function shfaqGjendjen() {
   const on = navigator.onLine;
   gjendja.className = on ? "pill online" : "pill";
-  gjendja.lastElementChild.textContent = on ? "Interneti u kthye" : "Je pa internet";
+  gjendja.lastElementChild.textContent = on ? "You're back online" : "You're offline";
   kerkesa.disabled = !on;
-  kerkesa.textContent = on ? "Dërgo kërkesë" : "Dërgo kërkesë · kërkon internet";
+  kerkesa.textContent = on ? "Send a request" : "Send a request · needs internet";
 }
 kerkesa.addEventListener("click", () => { location.href = "/sherbimet"; });
 function mesazh(teksti) {
@@ -79,27 +79,27 @@ function seksion(titulli, lista) {
 }
 async function load() {
   refresh.disabled = true;
-  mesazh("Po kërkojmë listën…");
+  mesazh("Fetching the list…");
   try {
     const response = await fetch("/api/sherbimet", { cache: "no-store" });
     const data = await response.json();
     if (!response.ok || !Array.isArray(data.sherbimet)) throw new Error("no_snapshot");
     seksionet.replaceChildren();
-    seksion("Produkte individuale", data.sherbimet.filter(s => s.kategoria === "Individuale"));
-    seksion("Paketat", data.sherbimet.filter(s => s.kategoria === "Paketë"));
+    seksion("Individual products", data.sherbimet.filter(s => s.kategoria === "Individuale"));
+    seksion("Packages", data.sherbimet.filter(s => s.kategoria === "Paketë"));
     const saved = response.headers.get("x-vexor-saved-at");
-    document.querySelector("#saved").textContent = saved ? new Date(saved).toLocaleString("sq-AL") : "ende jo";
+    document.querySelector("#saved").textContent = saved ? new Date(saved).toLocaleString("en-GB") : "not yet";
     mesazh(response.headers.get("x-vexor-source") === "cache"
-      ? "Lista e fundit e ruajtur. Mund të jetë e vjetër, serveri nuk u arrit."
-      : "Lista erdhi nga serveri.");
+      ? "Last saved list. It may be out of date; the server could not be reached."
+      : "The list came from the server.");
   } catch {
     mesazh(seksionet.children.length
-      ? "Lidhja dështoi. Lista në ekran është e mëparshme."
-      : "Ende nuk ka listë të ruajtur. Hape aplikacionin një herë me internet.");
+      ? "Connection failed. The list on screen is the previous one."
+      : "No saved list yet. Open the app once while online.");
   } finally { refresh.disabled = false; }
 }
 refresh.addEventListener("click", load);
-window.addEventListener("offline", () => { shfaqGjendjen(); mesazh("Lidhja u ndërpre. Lista mund të jetë e vjetër."); });
+window.addEventListener("offline", () => { shfaqGjendjen(); mesazh("Connection lost. The list may be out of date."); });
 window.addEventListener("online", () => { shfaqGjendjen(); load(); });
 shfaqGjendjen();
 load();

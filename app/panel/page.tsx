@@ -9,20 +9,20 @@ import { dataShqip } from "@/lib/email";
 export const dynamic = "force-dynamic";
 
 const mesazhet: Record<string, string> = {
-  hyr: "Hyr në llogari para se të menaxhosh kërkesat.",
-  ndaluar: "Nuk ke leje për këtë kërkesë. Statusi nuk ndryshoi.",
-  fushe: "ID e kërkesës duhet të jetë numër, statusi pranuar ose refuzuar.",
-  ruajtur: "Statusi u ruajt me sukses.",
-  databaza: "Nuk u lidhëm me databazën. Kontrollo Neon dhe provo përsëri.",
-  pranuar: "Kërkesa u pranua dhe kreatorit iu dërgua ftesa me email.",
-  "pranuar-pa-email": "Kërkesa u pranua, por emaili te kreatori nuk u dërgua. Kontrollo Gmail-in te .env.local.",
-  refuzuar: "Kërkesa u refuzua dhe kreatorit iu dërgua email.",
-  perpunuar: "Kjo kërkesë ishte përpunuar tashmë. Nuk u dërgua email i dytë.",
-  "refuzuar-pa-email": "Kërkesa u refuzua, por emaili te kreatori nuk u dërgua. Kontrollo Gmail-in te .env.local.",
-  takimi: "Zgjidh datën dhe orën, dhe shkruaj një link Zoom që fillon me https:// (p.sh. https://zoom.us/j/...).",
+  hyr: "Log in before managing requests.",
+  ndaluar: "You don't have permission for this request. The status did not change.",
+  fushe: "The request ID must be a number, and the status accepted or declined.",
+  ruajtur: "Status saved successfully.",
+  databaza: "We couldn't reach the database. Check Neon and try again.",
+  pranuar: "Request accepted and the invite was emailed to the creator.",
+  "pranuar-pa-email": "Request accepted, but the email to the creator was not sent. Check the Gmail settings in .env.local.",
+  refuzuar: "Request declined and the creator was notified by email.",
+  perpunuar: "This request was already handled. No second email was sent.",
+  "refuzuar-pa-email": "Request declined, but the email to the creator was not sent. Check the Gmail settings in .env.local.",
+  takimi: "Pick a date and time, and enter a Zoom link starting with https:// (e.g. https://zoom.us/j/...).",
 };
 
-const etiketat = { ne_pritje: "Në pritje", pranuar: "Pranuar", refuzuar: "Refuzuar" };
+const etiketat = { ne_pritje: "Pending", pranuar: "Accepted", refuzuar: "Declined" };
 
 // Shfaq linkun e profilit vetëm nëse është adresë http(s).
 const linkIsigurt = (l: string | null) => (l && /^https?:\/\//i.test(l) ? l : null);
@@ -42,9 +42,9 @@ export default async function Panel({ searchParams }: {
   } catch (e) {
     console.error("Gabimi i panelit:", e);
     return <main>
-      <h1>Paneli im</h1>
+      <h1>My panel</h1>
       <p role="alert">{mesazhet.databaza}</p>
-      <Link className="action" href="/panel">Provo përsëri</Link>
+      <Link className="action" href="/panel">Try again</Link>
     </main>;
   }
 
@@ -61,7 +61,7 @@ export default async function Panel({ searchParams }: {
     <article className="panel-karta">
       <div className="panel-karta-krye">
         <p className="eyebrow">#{k.id} · {k.sherbim}</p>
-        {k.lloji === "konsulte" && <span className="lloji-pill">Konsultë</span>}
+        {k.lloji === "konsulte" && <span className="lloji-pill">Consultation</span>}
         {k.statusi !== "ne_pritje" && (
           <span className={"statusi-pill statusi-pill-" + k.statusi}>{etiketat[k.statusi]}</span>
         )}
@@ -69,29 +69,29 @@ export default async function Panel({ searchParams }: {
       <h3>{k.emri}</h3>
       <p className="panel-karta-nen">
         {k.emaili}
-        {linkIsigurt(k.linku) && <> · <a href={linkIsigurt(k.linku)!} target="_blank" rel="noopener noreferrer">Profili</a></>}
+        {linkIsigurt(k.linku) && <> · <a href={linkIsigurt(k.linku)!} target="_blank" rel="noopener noreferrer">Profile</a></>}
       </p>
       {k.mesazhi && <p className="panel-karta-mesazhi">{k.mesazhi}</p>}
       {k.statusi === "pranuar" && k.data_takimit && <p className="takimi-info">
-        Takimi: <strong>{dataShqip(k.data_takimit)} · {k.ora_takimit}</strong>
-        {k.zoom_link && <> · <a href={k.zoom_link} target="_blank" rel="noopener noreferrer">Hap Zoom</a></>}
+        Meeting: <strong>{dataShqip(k.data_takimit)} · {k.ora_takimit}</strong>
+        {k.zoom_link && <> · <a href={k.zoom_link} target="_blank" rel="noopener noreferrer">Open Zoom</a></>}
       </p>}
       {k.statusi === "ne_pritje" && <>
         <form action={pranoKerkesen} className="pranimi">
           <input type="hidden" name="id" value={k.id} />
           <div className="pranimi-rresht">
-            <label>Data<input type="date" name="data" required min={sot} /></label>
-            <label>Ora<input type="time" name="ora" required defaultValue="14:00" /></label>
+            <label>Date<input type="date" name="data" required min={sot} /></label>
+            <label>Time<input type="time" name="ora" required defaultValue="14:00" /></label>
           </div>
-          <label>Linku i Zoom<input type="url" name="zoom" required defaultValue={zoomIm}
+          <label>Zoom link<input type="url" name="zoom" required defaultValue={zoomIm}
             placeholder="https://zoom.us/j/..." /></label>
           <button className="action" type="submit">
-            {k.lloji === "konsulte" ? "Cakto konsultën dhe dërgo ftesën" : "Prano dhe dërgo ftesën"}
+            {k.lloji === "konsulte" ? "Book the consultation and send invite" : "Accept and send invite"}
           </button>
         </form>
         <form action={ruajStatusin}>
           <input type="hidden" name="id" value={k.id} />
-          <button className="refuzo-btn" type="submit" name="statusi" value="refuzuar">Refuzo</button>
+          <button className="refuzo-btn" type="submit" name="statusi" value="refuzuar">Decline</button>
         </form>
       </>}
     </article>
@@ -101,8 +101,8 @@ export default async function Panel({ searchParams }: {
     <RifreskoAutomatik />
     <header className="panel-krye">
       <div>
-        <p className="vx-etiketa">Hapësira e punës</p>
-        <h1 className="vx-h1">Paneli i operatorit</h1>
+        <p className="vx-etiketa">Workspace</p>
+        <h1 className="vx-h1">Operator panel</h1>
         <p className="panel-krye-nen">{p.emri} · operator</p>
       </div>
       <Hyrja brenda klasa="dil-btn" />
@@ -111,32 +111,32 @@ export default async function Panel({ searchParams }: {
     {m && mesazhet[m] && <p role="status" className="panel-mesazh" data-m={m}>{mesazhet[m]}</p>}
 
     <div className="panel-numrat">
-      <div><strong>{numri("ne_pritje")}</strong><span className="statusi-ne_pritje">Në pritje</span></div>
-      <div><strong>{kerkesat.filter((k) => k.lloji === "konsulte" && k.statusi === "ne_pritje").length}</strong><span>Konsulta</span></div>
-      <div><strong>{numri("pranuar")}</strong><span className="statusi-pranuar">Pranuar</span></div>
-      <div><strong>{numri("refuzuar")}</strong><span className="statusi-refuzuar">Refuzuar</span></div>
+      <div><strong>{numri("ne_pritje")}</strong><span className="statusi-ne_pritje">Pending</span></div>
+      <div><strong>{kerkesat.filter((k) => k.lloji === "konsulte" && k.statusi === "ne_pritje").length}</strong><span>Consultations</span></div>
+      <div><strong>{numri("pranuar")}</strong><span className="statusi-pranuar">Accepted</span></div>
+      <div><strong>{numri("refuzuar")}</strong><span className="statusi-refuzuar">Declined</span></div>
     </div>
 
-    <p className="vx-etiketa panel-titull">Kërkesat e reja</p>
-    {teReja.length === 0 ? <p className="panel-bosh">Nuk ka kërkesa të reja.</p>
+    <p className="vx-etiketa panel-titull">New requests</p>
+    {teReja.length === 0 ? <p className="panel-bosh">No new requests.</p>
       : <div className="vx-panel-rrjeta">{teReja.map((k) => <Karta key={k.id} k={k} />)}</div>}
 
     {teTjera.length > 0 && <>
-      <p className="vx-etiketa panel-titull">Të përfunduara</p>
+      <p className="vx-etiketa panel-titull">Completed</p>
       <div className="vx-panel-rrjeta">{teTjera.map((k) => <Karta key={k.id} k={k} />)}</div>
     </>}
 
     {/* Java 5: prova e lejeve (mbetet për demonstrim në klasë) */}
     <details className="panel-prova">
-      <summary>Provë e lejeve (Java 5)</summary>
-      <p>ID ime GitHub: <code>{p.id}</code></p>
+      <summary>Permission test (Java 5)</summary>
+      <p>My GitHub ID: <code>{p.id}</code></p>
       <form action={ruajStatusin}>
-        <label htmlFor="id">ID e kërkesës</label>{" "}
+        <label htmlFor="id">Request ID</label>{" "}
         <input id="id" name="id" type="number" min="1" required />{" "}
         <input type="hidden" name="statusi" value="pranuar" />
-        <button type="submit">Provo ta pranosh</button>
+        <button type="submit">Try to accept</button>
       </form>
-      <p>Shkruaj ID-në e një kërkese për shërbim që nuk e zotëron. Serveri e refuzon.</p>
+      <p>Enter the ID of a request for a service you don’t own. The server rejects it.</p>
     </details>
   </main>;
 }

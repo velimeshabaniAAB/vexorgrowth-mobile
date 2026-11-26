@@ -62,73 +62,74 @@ export async function njoftoMeEmail(k: {
   const marresi = emailiIAdminit();
   if (!marresi) return false;
   const konsulte = k.lloji === "konsulte";
-  const titulli = konsulte ? "Konsultë e re" : "Kërkesë e re";
+  const titulli = konsulte ? "New consultation" : "New request";
   return dergo({
     to: marresi,
     replyTo: k.emaili,
-    subject: `${titulli}: ${k.sherbimi} nga ${k.emri} · ${new Date().toLocaleString("sq-AL", { timeZone: "Europe/Belgrade" })}`,
+    subject: `${titulli}: ${k.sherbimi} from ${k.emri} · ${new Date().toLocaleString("en-GB", { timeZone: "Europe/Belgrade" })}`,
     text: [
-      `Lloji: ${konsulte ? "Bisedë konsultuese (nuk është ende e sigurt çfarë i duhet)" : "Kërkesë për shërbimin"}`,
-      `Shërbimi: ${k.sherbimi}`,
-      `Emri: ${k.emri}`,
-      `Emaili: ${k.emaili}`,
-      `Profili: ${k.linku ?? "-"}`,
-      `Mesazhi: ${k.mesazhi ?? "-"}`,
+      `Type: ${konsulte ? "Consultation call (not sure yet what they need)" : "Service request"}`,
+      `Service: ${k.sherbimi}`,
+      `Name: ${k.emri}`,
+      `Email: ${k.emaili}`,
+      `Profile: ${k.linku ?? "-"}`,
+      `Message: ${k.mesazhi ?? "-"}`,
       "",
-      "Hape te paneli për ta pranuar ose refuzuar.",
-      "Kliko Reply për t'i shkruar direkt kreatorit.",
+      "Open the panel to accept or decline it.",
+      "Click Reply to write to the creator directly.",
     ].join("\n"),
     html: emailVexor(`${titulli}: ${k.sherbimi}`,
-      `<p style="margin:0"><b>${ruaj(k.emri)}</b> ${konsulte ? "kërkoi një bisedë konsultuese." : "dërgoi një kërkesë."}</p>` +
-      tabela([["Lloji", konsulte ? "Konsultë" : "Shërbim"], ["Email", k.emaili], ["Profili", k.linku ?? "-"], ["Mesazhi", k.mesazhi ?? "-"]]) +
-      butoni("Hape në panel", `${adresaBaze()}/panel`) +
-      `<p style="font-size:13px;color:#71717a">Kliko Reply për t'i shkruar direkt kreatorit.</p>`),
+      `<p style="margin:0"><b>${ruaj(k.emri)}</b> ${konsulte ? "asked for a consultation call." : "sent a request."}</p>` +
+      tabela([["Type", konsulte ? "Consultation" : "Service"], ["Email", k.emaili], ["Profile", k.linku ?? "-"], ["Message", k.mesazhi ?? "-"]]) +
+      butoni("Open in panel", `${adresaBaze()}/panel`) +
+      `<p style="font-size:13px;color:#71717a">Click Reply to write to the creator directly.</p>`),
   });
 }
 
 // ---------- Emailat te kreatori ----------
 
-const DITET = ["e diel", "e hënë", "e martë", "e mërkurë", "e enjte", "e premte", "e shtunë"];
+const DITET = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MUAJT = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-// "2026-11-13" -> "e premte, 13.11.2026"
+// "2026-11-13" -> "Friday, 13 November 2026"
 export function dataShqip(data: string) {
   const [v, m, d] = data.split("-").map(Number);
   const dita = DITET[new Date(Date.UTC(v, m - 1, d)).getUTCDay()];
-  return `${dita}, ${String(d).padStart(2, "0")}.${String(m).padStart(2, "0")}.${v}`;
+  return `${dita}, ${d} ${MUAJT[m - 1]} ${v}`;
 }
 
 // 1) Sapo kreatori dërgon kërkesën (statusi: Në pritje).
 export async function njoftoKreatorinDerguar(k: { emri: string; emaili: string; sherbimi: string; linku: string; lloji: Lloji }) {
   const konsulte = k.lloji === "konsulte";
-  const cka = konsulte ? `bisedën konsultuese (${k.sherbimi})` : `"${k.sherbimi}"`;
+  const cka = konsulte ? `a consultation call (${k.sherbimi})` : `"${k.sherbimi}"`;
   return dergo({
     to: k.emaili,
     replyTo: emailiIAdminit(),
-    subject: konsulte ? "E morëm kërkesën tënde për konsultë" : `E morëm kërkesën tënde: ${k.sherbimi}`,
+    subject: konsulte ? "We received your consultation request" : `We received your request: ${k.sherbimi}`,
     text: [
-      `Përshëndetje ${k.emri},`,
+      `Hi ${k.emri},`,
       "",
-      `Kërkesa jote për ${cka} u ruajt. Statusi: Në pritje.`,
+      `Your request for ${cka} has been saved. Status: Pending.`,
       konsulte
-        ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom, ku të ndihmojmë të zgjedhësh produktin."
-        : "Do të të kontaktojmë brenda 24 orësh.",
+        ? "We will write to you within 24 hours to book a short Zoom call and help you choose the right product."
+        : "We will contact you within 24 hours.",
       "",
-      "Ndiq kërkesën tënde këtu (linku është personal):",
+      "Track your request here (this link is personal):",
       k.linku,
       "",
-      "Nëse ky email doli te Spam, kliko \"Not spam\", që të mos e humbasësh ftesën për takim.",
+      "If this email landed in Spam, click \"Not spam\" so you don't miss your meeting invite.",
       "",
       "Vexor Growth",
     ].join("\n"),
-    html: emailVexor(konsulte ? "E morëm kërkesën për konsultë" : "E morëm kërkesën tënde",
-      `<p style="margin:0">Përshëndetje ${ruaj(k.emri)},</p>` +
-      `<p>Kërkesa jote për <b>${ruaj(konsulte ? "bisedë konsultuese" : k.sherbimi)}</b> u ruajt.</p>` +
-      tabela([["Statusi", "Në pritje"], ["Lloji", konsulte ? "Konsultë" : "Shërbim"], ["Shërbimi", k.sherbimi]]) +
+    html: emailVexor(konsulte ? "We received your consultation request" : "We received your request",
+      `<p style="margin:0">Hi ${ruaj(k.emri)},</p>` +
+      `<p>Your request for <b>${ruaj(konsulte ? "a consultation call" : k.sherbimi)}</b> has been saved.</p>` +
+      tabela([["Status", "Pending"], ["Type", konsulte ? "Consultation" : "Service"], ["Service", k.sherbimi]]) +
       `<p>${konsulte
-        ? "Do të të shkruajmë brenda 24 orësh për të caktuar një bisedë të shkurtër në Zoom."
-        : "Do të të kontaktojmë brenda 24 orësh."}</p>` +
-      butoni("Ndiq kërkesën", k.linku) +
-      `<p style="font-size:13px;color:#71717a">Linku është personal. Nëse ky email doli te Spam, kliko "Not spam", që të mos e humbasësh ftesën për takim.</p>`),
+        ? "We will write to you within 24 hours to book a short Zoom call."
+        : "We will contact you within 24 hours."}</p>` +
+      butoni("Track your request", k.linku) +
+      `<p style="font-size:13px;color:#71717a">This link is personal. If this email landed in Spam, click "Not spam" so you don't miss your meeting invite.</p>`),
   });
 }
 
@@ -147,15 +148,15 @@ export function krijoIcs(t: { id: number; sherbim: string; data: string; ora: st
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Vexor Growth//Takimet//SQ",
+    "PRODID:-//Vexor Growth//Meetings//EN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
     `UID:vexor-kerkesa-${t.id}@vexorgrowth`,
     `DTSTAMP:${tani}`,
     `DTSTART:${lokale(fillimi)}`,
     `DTEND:${lokale(fundi)}`,
-    `SUMMARY:${icsTekst(`Takim me Vexor Growth: ${t.sherbim}`)}`,
-    `DESCRIPTION:${icsTekst(`Linku i Zoom: ${t.zoom}`)}`,
+    `SUMMARY:${icsTekst(`Meeting with Vexor Growth: ${t.sherbim}`)}`,
+    `DESCRIPTION:${icsTekst(`Zoom link: ${t.zoom}`)}`,
     `LOCATION:${icsTekst(t.zoom)}`,
     "END:VEVENT",
     "END:VCALENDAR",
@@ -168,34 +169,34 @@ export async function njoftoKreatorinPranuar(t: {
   linku?: string; lloji?: Lloji;
 }) {
   const konsulte = t.lloji === "konsulte";
-  const cka = konsulte ? "bisedën konsultuese" : `"${t.sherbim}"`;
+  const cka = konsulte ? "a consultation call" : `"${t.sherbim}"`;
   return dergo({
     to: t.emaili,
     replyTo: emailiIAdminit(),
-    subject: `${konsulte ? "Konsulta u caktua" : "Takimi u caktua"}: ${t.sherbim} · ${dataShqip(t.data)}, ${t.ora}`,
+    subject: `${konsulte ? "Consultation booked" : "Meeting booked"}: ${t.sherbim} · ${dataShqip(t.data)}, ${t.ora}`,
     text: [
-      `Përshëndetje ${t.emri},`,
+      `Hi ${t.emri},`,
       "",
-      `Kërkesa jote për ${cka} u pranua.`,
+      `Your request for ${cka} has been accepted.`,
       "",
-      `Data: ${dataShqip(t.data)}`,
-      `Ora: ${t.ora} (45 min)`,
-      `Linku i Zoom: ${t.zoom}`,
+      `Date: ${dataShqip(t.data)}`,
+      `Time: ${t.ora} (45 min)`,
+      `Zoom link: ${t.zoom}`,
       "",
-      "Hape skedarin takimi.ics për ta shtuar takimin në kalendarin tënd.",
-      ...(t.linku ? ["", "Kërkesa jote:", t.linku] : []),
+      "Open the attached meeting.ics file to add the meeting to your calendar.",
+      ...(t.linku ? ["", "Your request:", t.linku] : []),
       "",
       "Vexor Growth",
     ].join("\n"),
-    html: emailVexor(konsulte ? "Konsulta u caktua" : "Kërkesa u pranua",
-      `<p style="margin:0">Përshëndetje ${ruaj(t.emri)},</p>` +
-      `<p>Kërkesa jote për <b>${ruaj(konsulte ? "bisedë konsultuese" : t.sherbim)}</b> u pranua. Ja takimi ynë:</p>` +
-      tabela([["Data", dataShqip(t.data)], ["Ora", `${t.ora} (45 min)`], ["Ku", "Zoom"]]) +
-      butoni("Hyr në Zoom", t.zoom) +
-      (t.linku ? butoni("Shto në kalendar", `${t.linku}/kalendari`, false) + butoni("Ndiq kërkesën", t.linku, false) : "") +
-      `<p style="font-size:13px;color:#71717a">Takimin mund ta shtosh në kalendar edhe me skedarin takimi.ics bashkëngjitur.</p>`),
+    html: emailVexor(konsulte ? "Consultation booked" : "Request accepted",
+      `<p style="margin:0">Hi ${ruaj(t.emri)},</p>` +
+      `<p>Your request for <b>${ruaj(konsulte ? "a consultation call" : t.sherbim)}</b> has been accepted. Here is our meeting:</p>` +
+      tabela([["Date", dataShqip(t.data)], ["Time", `${t.ora} (45 min)`], ["Where", "Zoom"]]) +
+      butoni("Join Zoom", t.zoom) +
+      (t.linku ? butoni("Add to calendar", `${t.linku}/kalendari`, false) + butoni("Track your request", t.linku, false) : "") +
+      `<p style="font-size:13px;color:#71717a">You can also add the meeting to your calendar with the attached meeting.ics file.</p>`),
     attachments: [{
-      filename: "takimi.ics",
+      filename: "meeting.ics",
       content: Buffer.from(krijoIcs(t), "utf-8"),
       contentType: "text/calendar; charset=utf-8; method=PUBLISH",
     }],
@@ -205,54 +206,54 @@ export async function njoftoKreatorinPranuar(t: {
 // 3) Kur operatori e refuzon kërkesën.
 export async function njoftoKreatorinRefuzuar(k: { emri: string; emaili: string; sherbim: string; lloji: Lloji; linku?: string }) {
   const konsulte = k.lloji === "konsulte";
-  const cka = konsulte ? "bisedën konsultuese" : `"${k.sherbim}"`;
+  const cka = konsulte ? "a consultation call" : `"${k.sherbim}"`;
   const sherbimet = `${adresaBaze()}/sherbimet`;
   return dergo({
     to: k.emaili,
     replyTo: emailiIAdminit(),
-    subject: `Përgjigje për kërkesën tënde: ${k.sherbim}`,
+    subject: `About your request: ${k.sherbim}`,
     text: [
-      `Përshëndetje ${k.emri},`,
+      `Hi ${k.emri},`,
       "",
-      `Faleminderit që na shkrove. Për momentin nuk mund ta pranojmë kërkesën për ${cka}.`,
-      "Mund të dërgosh një kërkesë të re më vonë, ose të na shkruash direkt duke iu përgjigjur këtij emaili.",
+      `Thank you for reaching out. Unfortunately, we can't accept your request for ${cka} at the moment.`,
+      "You are welcome to send a new request later, or write to us directly by replying to this email.",
       "",
-      `Shërbimet tona: ${sherbimet}`,
+      `Our services: ${sherbimet}`,
       "",
       "Vexor Growth",
     ].join("\n"),
-    html: emailVexor("Përgjigje për kërkesën tënde",
-      `<p style="margin:0">Përshëndetje ${ruaj(k.emri)},</p>` +
-      `<p>Faleminderit që na shkrove. Për momentin nuk mund ta pranojmë kërkesën për <b>${ruaj(konsulte ? "bisedë konsultuese" : k.sherbim)}</b>.</p>` +
-      tabela([["Statusi", "Refuzuar"], ["Shërbimi", k.sherbim]]) +
-      `<p>Mund të dërgosh një kërkesë të re më vonë, ose të na shkruash direkt duke iu përgjigjur këtij emaili.</p>` +
-      butoni("Shiko shërbimet", sherbimet) +
-      (k.linku ? butoni("Ndiq kërkesën", k.linku, false) : "")),
+    html: emailVexor("About your request",
+      `<p style="margin:0">Hi ${ruaj(k.emri)},</p>` +
+      `<p>Thank you for reaching out. Unfortunately, we can't accept your request for <b>${ruaj(konsulte ? "a consultation call" : k.sherbim)}</b> at the moment.</p>` +
+      tabela([["Status", "Declined"], ["Service", k.sherbim]]) +
+      `<p>You are welcome to send a new request later, or write to us directly by replying to this email.</p>` +
+      butoni("View services", sherbimet) +
+      (k.linku ? butoni("Track your request", k.linku, false) : "")),
   });
 }
 
 // 4) "E humbe emailin?": i dërgon kreatorit linqet e kërkesave të tij.
 export async function dergoLinqetEKerkesave(emaili: string, lista: { sherbim: string; linku: string; statusi: string }[]) {
-  const statusi: Record<string, string> = { ne_pritje: "Në pritje", pranuar: "Pranuar", refuzuar: "Refuzuar" };
+  const statusi: Record<string, string> = { ne_pritje: "Pending", pranuar: "Accepted", refuzuar: "Declined" };
   return dergo({
     to: emaili,
     replyTo: emailiIAdminit(),
-    subject: `Kërkesat e tua te Vexor Growth (${lista.length})`,
+    subject: `Your requests at Vexor Growth (${lista.length})`,
     text: [
-      "Përshëndetje,",
+      "Hi,",
       "",
-      "Këto janë linqet personale të kërkesave të tua:",
+      "Here are the personal links to your requests:",
       "",
       ...lista.map((k) => `• ${k.sherbim} (${statusi[k.statusi] ?? k.statusi}): ${k.linku}`),
       "",
-      "Nëse nuk e kërkove ti këtë email, mund ta injorosh.",
+      "If you did not ask for this email, you can ignore it.",
       "",
       "Vexor Growth",
     ].join("\n"),
-    html: emailVexor("Kërkesat e tua",
-      `<p style="margin:0">Këto janë linqet personale të kërkesave të tua:</p>` +
+    html: emailVexor("Your requests",
+      `<p style="margin:0">Here are the personal links to your requests:</p>` +
       lista.map((k) => `<p style="margin:14px 0 4px"><b>${ruaj(k.sherbim)}</b> · ${ruaj(statusi[k.statusi] ?? k.statusi)}</p>` +
-        butoni("Hape kërkesën", k.linku, false)).join("") +
-      `<p style="font-size:13px;color:#71717a">Nëse nuk e kërkove ti këtë email, mund ta injorosh.</p>`),
+        butoni("Open request", k.linku, false)).join("") +
+      `<p style="font-size:13px;color:#71717a">If you did not ask for this email, you can ignore it.</p>`),
   });
 }

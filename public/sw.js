@@ -1,5 +1,5 @@
 // Kjo cache përmban VETËM dokumentin offline, ikonat dhe listën publike të shërbimeve.
-const CACHE = "vexor-public-v2";
+const CACHE = "vexor-public-v3";
 const API = "/api/sherbimet";
 const SHELL = ["/offline.html", "/logo-rreth.png", "/icons/icon-192.png", "/icons/icon-512.png"];
 

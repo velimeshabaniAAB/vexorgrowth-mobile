@@ -4,8 +4,8 @@ import { dergoLinqet } from "./actions";
 export const dynamic = "force-dynamic";
 
 const mesazhet: Record<string, string> = {
-  derguar: "Nëse ky email ka kërkesa, linqet të vijnë brenda pak minutash. Shiko edhe te Spam.",
-  emaili: "Shkruaj një email të saktë.",
+  derguar: "If this email has requests, the links will arrive within a few minutes. Check Spam too.",
+  emaili: "Please enter a valid email.",
 };
 
 export default async function KerkesatEMia({ searchParams }: {
@@ -14,27 +14,27 @@ export default async function KerkesatEMia({ searchParams }: {
   const { m } = await searchParams;
   return (
     <main>
-      <p className="eyebrow">Për kreatorët</p>
-      <h1>Kërkesat e mia</h1>
+      <p className="eyebrow">For creators</p>
+      <h1>My requests</h1>
       <p className="lead">
-        Nuk të duhet llogari. Kur dërgon kërkesën, të vjen me email një link personal ku sheh
-        statusin, datën dhe linkun e takimit.
+        No account needed. When you send a request, you get a personal link by email where you see
+        the status, the date and the meeting link.
       </p>
 
       <div className="kerkesat-info">
         <span aria-hidden="true">✉️</span>
         <div>
-          <strong>Hape linkun nga emaili</strong>
-          <span>&quot;E morëm kërkesën tënde&quot; · nga Vexor Growth</span>
+          <strong>Open the link from your email</strong>
+          <span>&quot;We received your request&quot; · from Vexor Growth</span>
         </div>
       </div>
 
       <form action={dergoLinqet} className="kerkesat-forma">
-        <h2>E humbe emailin?</h2>
-        <label htmlFor="emaili">Emaili me të cilin dërgove kërkesën</label>
+        <h2>Lost the email?</h2>
+        <label htmlFor="emaili">The email you used for your request</label>
         <input id="emaili" name="emaili" type="email" required maxLength={200}
-          autoComplete="email" placeholder="emri@gmail.com" />
-        <button className="action" type="submit">Ma dërgo linkun përsëri</button>
+          autoComplete="email" placeholder="name@gmail.com" />
+        <button className="action" type="submit">Send me the link again</button>
         {m && mesazhet[m] && (
           <p role="status" className="panel-mesazh" data-m={m === "derguar" ? "ruajtur" : "fushe"}>
             {mesazhet[m]}
@@ -43,7 +43,7 @@ export default async function KerkesatEMia({ searchParams }: {
       </form>
 
       <p className="kerkesat-fund">
-        Ende s&apos;ke dërguar kërkesë? <Link href="/sherbimet">Shiko shërbimet</Link>
+        Haven&apos;t sent a request yet? <Link href="/sherbimet">View services</Link>
       </p>
     </main>
   );

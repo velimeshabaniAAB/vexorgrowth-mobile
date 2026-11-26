@@ -14,7 +14,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ kodi: s
   return new Response(ics, {
     headers: {
       "Content-Type": "text/calendar; charset=utf-8",
-      "Content-Disposition": 'attachment; filename="takimi.ics"',
+      "Content-Disposition": 'attachment; filename="meeting.ics"',
       "Cache-Control": "no-store",
     },
   });
